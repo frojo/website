@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "parcel develop index.html",
+    "build-gh": "parcel build index.html -d docs --public-url ./",
+    "build": "parcel build index.html -d docs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
