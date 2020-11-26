@@ -1,0 +1,24 @@
+{
+  "name": "website",
+  "version": "1.0.0",
+  "description": "secrets are fun",
+  "main": "index.js",
+  "scripts": {
+    "start": "parcel develop index.html",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/frojo/website.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/frojo/website/issues"
+  },
+  "homepage": "https://github.com/frojo/website#readme",
+  "devDependencies": {
+    "typescript": "^4.1.2"
+  }
+}
