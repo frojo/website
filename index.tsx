@@ -1,3 +1,4 @@
+import { render } from "./src/render";
 
 let i = 0;
 
@@ -6,6 +7,7 @@ function tick() {
   console.log("tick uwu");
   i++;
   lasttick = Date.now();
+  render();
   window.requestAnimationFrame(tick);
 }
 
