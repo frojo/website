@@ -1,0 +1,49 @@
+html,
+body {
+  font-family: "Times New Roman", serif;
+
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  overscroll-behavior-x: none;
+  overscroll-behavior-y: none;
+  user-select: none;
+
+  background-color: #f9f3d6;
+  /*
+   
+  off-whites:
+  yellow: f9f3d6
+
+  foregrounds:
+
+   */
+}
+* {
+  user-select: none !important;
+}
+#window {
+  overscroll-behavior-y: none;
+  overscroll-behavior-x: none;
+  position: absolute;
+  overflow: hidden;
+
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+
+  background-color: #fd28fC;
+}
+@media screen and (max-width: 600px) {
+  #window {
+    zoom: 0.6;
+    /* overflow: visible; */
+
+    /* overflow: hidden; */
+    /* overscroll-behavior-y: none; */
+  }
+}
+
+
+
