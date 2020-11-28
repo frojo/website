@@ -17,9 +17,11 @@ class Header extends React.Component {
     return (
       <div id="header">
         <div id="name"> fran</div>
-        <div className="header_item"> work</p>
-        <div className="header_item"> about</p>
-        <div className="header_item"> blog</p>
+        <div id="header-menu-wrapper">
+          <div className="header-menu-item"> work</div>
+          <div className="header-menu-item"> about</div>
+          <div className="header-menu-item"> blog</div>
+        </div>
       </div>
     );}
 }

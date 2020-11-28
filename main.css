@@ -1,6 +1,7 @@
 html,
 body {
   font-family: "Times New Roman", serif;
+  font-size: 32px;
 
   width: 100vw;
   height: 100vh;
@@ -20,31 +21,39 @@ body {
 
    */
 }
+
 * {
   user-select: none !important;
 }
-#window {
-  overscroll-behavior-y: none;
-  overscroll-behavior-x: none;
-  position: absolute;
-  overflow: hidden;
 
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-
-  background-color: #fd28fC;
-}
 @media screen and (max-width: 600px) {
-  #window {
-    zoom: 0.6;
-    /* overflow: visible; */
-
-    /* overflow: hidden; */
-    /* overscroll-behavior-y: none; */
-  }
 }
 
+
+
+#header {
+  /* nice big aesthetic calming deadzones */
+  margin-left: 90px;
+  margin-right: 90px;
+  margin-top: 80px;
+  margin-bottom: 80px;
+
+  /* dont let the menu items go toooo far right on huge screens */
+  max-width: 900px;
+}
+
+#name {
+  display: inline;
+}
+
+
+/* container for menu items (work, about blog) */
+#header-menu-wrapper {
+  float: right;
+}
+
+.header-menu-item {
+  display: inline;
+}
 
 
