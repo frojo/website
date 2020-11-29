@@ -10,12 +10,15 @@ body {
   overscroll-behavior-y: none;
   user-select: none;
 
-  background-color: #f9f3d6;
+  background-color: #dfeded;
   /*
    
   off-whites:
   yellow: f9f3d6
   another yellow: faefcd
+
+  light cyan: d7e4e4
+  darker light cyan: dfeded
 
   foregrounds:
 
@@ -54,6 +57,8 @@ body {
 
 .header-menu-item {
   display: inline;
+  margin-left: 14px;
+  margin-right: 14px;
 }
 
 

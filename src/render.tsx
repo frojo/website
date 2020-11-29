@@ -11,7 +11,7 @@ function render() {
   ReactDOM.render(element, document.getElementById("page"));
 }
 
-
+// the header at the top of the page throughout the website
 class Header extends React.Component {
   render() {
     return (
@@ -24,6 +24,15 @@ class Header extends React.Component {
         </div>
       </div>
     );}
+}
+
+// the clickable project name/subtitle link
+class ProjectItem extends React.Component {
+  render() {
+    return (
+      <div> a project </div>
+    );}
+
 }
 
 
