@@ -2,14 +2,20 @@ import * as React from "react";
 import ReactDOM = require("react-dom");
 import classNames from "classnames";
 
+import project_metas from "./../assets/project_metas.json"
+
+
 function render() {
   const element = (
     <React.Fragment>
       <Header />
+      <ProjectList />
     </React.Fragment>
   );
   ReactDOM.render(element, document.getElementById("page"));
 }
+
+// pretty sure i want to use JSON.parse() somewhere
 
 // the header at the top of the page throughout the website
 class Header extends React.Component {
@@ -27,10 +33,29 @@ class Header extends React.Component {
 }
 
 // the clickable project name/subtitle link
+class ProjectList extends React.Component {
+  render() {
+    // maybe move this stuff into a constructor
+    const projects = project_metas.projects;
+    return (
+    <div id="project-list">
+      {projects.map((project, idx) =>
+        <ProjectItem key={idx} project={project}/>
+    </div>
+      
+    );}
+
+}
+
+// the clickable project name/subtitle link
 class ProjectItem extends React.Component {
   render() {
+    const project = this.props.project;
     return (
-      <div> a project </div>
+      <div className="project-item"> 
+        <div className="project-title">{project.title}</div>
+        <div className="project-subtitle"><i>{project.subtitle}</i></div>
+      </div>
     );}
 
 }

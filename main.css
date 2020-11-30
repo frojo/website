@@ -1,13 +1,9 @@
 html,
 body {
   font-family: "Times New Roman", serif;
-  font-size: 32px;
 
   width: 100vw;
   height: 100vh;
-  overflow: hidden;
-  overscroll-behavior-x: none;
-  overscroll-behavior-y: none;
   user-select: none;
 
   background-color: #dfeded;
@@ -23,6 +19,9 @@ body {
   foregrounds:
 
    */
+
+  margin: 0px;
+  
 }
 
 * {
@@ -33,13 +32,18 @@ body {
 }
 
 
-
-#header {
-  /* nice big aesthetic calming deadzones */
+#page {
   margin-left: 90px;
   margin-right: 90px;
   margin-top: 80px;
   margin-bottom: 80px;
+}
+
+#header {
+  font-size: 32px;
+  margin-bottom: 80px;
+
+  /* nice big aesthetic calming deadzones */
 
   /* dont let the menu items go toooo far right on huge screens */
   max-width: 900px;
@@ -59,6 +63,23 @@ body {
   display: inline;
   margin-left: 14px;
   margin-right: 14px;
+}
+
+#project-list {
+}
+
+.project-item {
+  margin-top: 32px;
+  margin-bottom: 32px;
+}
+
+.project-title {
+  font-size: 28px;
+}
+
+.project-subtitle {
+  font-size: 16px;
+  margin-left:32px;
 }
 
 

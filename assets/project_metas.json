@@ -1,0 +1,51 @@
+
+{ 
+  "projects" : [
+    {
+      "title": "camping simulator 2020",
+      "subtitle": "a conversation on August 28",
+      "link": "https://frojo.itch.io/camping"
+    },
+    {
+      "title": "a summer afternoon in bloomfield",
+      "subtitle": "a love letter to the neighborhood",
+      "link": "https://frojo.itch.io/bloomfield"
+    },
+    {
+      "title": "loops",
+      "subtitle": "a meditation on rituals",
+      "link": "https://frojo.itch.io/loops"
+    },
+    {
+      "title": "sou.ls",
+      "subtitle": "a lonely social network"
+    },
+    {
+      "title": "another project",
+      "subtitle": "where i would put a project if i had one",
+      "link": "https://frojo.itch.io/loops"
+    },
+    {
+      "title": "lorem project ipsum",
+      "subtitle": "john cage says the idea is more important anyay"
+    },
+    {
+      "title": "another project",
+      "subtitle": "where i would put a project if i had one",
+      "link": "https://frojo.itch.io/loops"
+    },
+    {
+      "title": "lorem project ipsum",
+      "subtitle": "john cage says the idea is more important anyay"
+    },
+    {
+      "title": "another project",
+      "subtitle": "where i would put a project if i had one",
+      "link": "https://frojo.itch.io/loops"
+    },
+    {
+      "title": "lorem project ipsum",
+      "subtitle": "john cage says the idea is more important anyay"
+    }
+  ]
+}
