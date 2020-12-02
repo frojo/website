@@ -37,10 +37,12 @@ class ProjectList extends React.Component {
   render() {
     // maybe move this stuff into a constructor
     const projects = project_metas.projects;
+
+
     return (
     <div id="project-list">
       {projects.map((project, idx) =>
-        <ProjectItem key={idx} project={project}/>
+        <ProjectItem key={idx} project={project} />
     </div>
       
     );}
@@ -49,10 +51,21 @@ class ProjectList extends React.Component {
 
 // the clickable project name/subtitle link
 class ProjectItem extends React.Component {
+  mouseEnter(e) {
+    console.log("hovering!");
+  }
+
+  mouseLeave(e) {
+    console.log("hovering!");
+  }
+
   render() {
     const project = this.props.project;
+
     return (
-      <div className="project-item"> 
+      <div className="project-item"
+           onMouseEnter={this.mouseEnter}
+           onMouseLeave={this.mouseLeave}> 
         <div className="project-title">{project.title}</div>
         <div className="project-subtitle"><i>{project.subtitle}</i></div>
       </div>
