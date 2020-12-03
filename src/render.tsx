@@ -51,21 +51,29 @@ class ProjectList extends React.Component {
 
 // the clickable project name/subtitle link
 class ProjectItem extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      hovered : false;
+    };
+  }
+
   mouseEnter(e) {
     console.log("hovering!");
   }
 
   mouseLeave(e) {
-    console.log("hovering!");
+    console.log("stopped hovering!");
   }
 
   render() {
     const project = this.props.project;
+    const { hovered } = this.state;
 
     return (
       <div className="project-item"
-           onMouseEnter={this.mouseEnter}
-           onMouseLeave={this.mouseLeave}> 
+        onMouseEnter={this.mouseEnter}
+        onMouseLeave={this.mouseLeave}> 
         <div className="project-title">{project.title}</div>
         <div className="project-subtitle"><i>{project.subtitle}</i></div>
       </div>
