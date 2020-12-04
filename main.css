@@ -82,4 +82,10 @@ body {
   margin-left:32px;
 }
 
+/* hover effects */
+
+.blacked-out {
+  background-color: black;
+}
+
 

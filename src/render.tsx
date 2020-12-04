@@ -15,8 +15,6 @@ function render() {
   ReactDOM.render(element, document.getElementById("page"));
 }
 
-// pretty sure i want to use JSON.parse() somewhere
-
 // the header at the top of the page throughout the website
 class Header extends React.Component {
   render() {
@@ -38,7 +36,6 @@ class ProjectList extends React.Component {
     // maybe move this stuff into a constructor
     const projects = project_metas.projects;
 
-
     return (
     <div id="project-list">
       {projects.map((project, idx) =>
@@ -56,14 +53,21 @@ class ProjectItem extends React.Component {
     this.state = {
       hovered : false;
     };
+
+    this.mouseEnter = this.mouseEnter.bind(this);
+    this.mouseLeave = this.mouseLeave.bind(this);
   }
 
   mouseEnter(e) {
-    console.log("hovering!");
+    this.setState((state, props) => ({
+      hovered : true;
+    }));
   }
 
   mouseLeave(e) {
-    console.log("stopped hovering!");
+    this.setState((state, props) => ({
+      hovered : false;
+    }));
   }
 
   render() {
@@ -71,15 +75,30 @@ class ProjectItem extends React.Component {
     const { hovered } = this.state;
 
     return (
-      <div className="project-item"
-        onMouseEnter={this.mouseEnter}
-        onMouseLeave={this.mouseLeave}> 
-        <div className="project-title">{project.title}</div>
+      <div 
+        className="project-item"
+      >
+        <div 
+          className={classNames({
+            "project-title": true,
+            "blacked-out": hovered,
+          })}
+          onMouseEnter={this.mouseEnter}
+          onMouseLeave={this.mouseLeave}
+        >{project.title}</div>
         <div className="project-subtitle"><i>{project.subtitle}</i></div>
       </div>
     );}
 
 }
+/* 
+        className="project-item"
+        className={classNames({"project-item": true})}
+        className={classNames({
+          project-item: true,
+          blacked-out: true,
+        })}
+*/
 
 
 export { render };
