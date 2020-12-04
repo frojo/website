@@ -78,15 +78,27 @@ class ProjectItem extends React.Component {
       <div 
         className="project-item"
       >
-        <div 
+        <div
           className={classNames({
             "project-title": true,
             "blacked-out": hovered,
           })}
           onMouseEnter={this.mouseEnter}
           onMouseLeave={this.mouseLeave}
-        >{project.title}</div>
-        <div className="project-subtitle"><i>{project.subtitle}</i></div>
+        >
+          {project.title}
+        </div>
+        <br></br>
+        <div 
+          className={classNames({
+            "project-subtitle": true,
+            "blacked-out": hovered,
+          })}
+          onMouseEnter={this.mouseEnter}
+          onMouseLeave={this.mouseLeave}
+        >
+          <i>{project.subtitle}</i>
+        </div>
       </div>
     );}
 

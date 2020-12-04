@@ -81,6 +81,7 @@ body {
 .project-subtitle {
   font-size: 16px;
   margin-left:32px;
+  display: inline;
 }
 
 /* hover effects */
