@@ -75,6 +75,7 @@ body {
 
 .project-title {
   font-size: 28px;
+  display: inline;
 }
 
 .project-subtitle {
