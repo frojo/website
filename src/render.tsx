@@ -5,14 +5,44 @@ import classNames from "classnames";
 import project_metas from "./../assets/project_metas.json"
 
 
+// this runs on a tick
 function render() {
-  const element = (
-    <React.Fragment>
-      <Header />
-      <ProjectList />
-    </React.Fragment>
-  );
-  ReactDOM.render(element, document.getElementById("page"));
+  const element = <Page />;
+
+  ReactDOM.render(element, document.getElementById("root"));
+}
+
+// the header at the top of the page throughout the website
+class Page extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      // pick one of 3 colors at random (do once per page load)
+      rand_color : Math.floor(Math.random() * 3)
+    };
+
+  }
+
+  render() {
+    const color_idx = this.state.rand_color;
+
+    // default to yellow
+    let bg_color = "yellow-bg";
+    if (color_idx == 0) {
+      bg_color = "yellow-bg";
+    } else if (color_idx == 1) {
+      bg_color = "purple-bg";
+    } else if (color_idx == 2) {
+      bg_color = "blue-bg";
+    }
+    // DEBUG
+    // bg_color = "yellow-bg";
+    return (
+      <div id="page" className={bg_color}>
+        <Header />
+        <ProjectList />
+      </div>
+    );}
 }
 
 // the header at the top of the page throughout the website

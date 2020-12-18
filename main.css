@@ -5,21 +5,6 @@ body {
   width: 100vw;
   height: 100vh;
   user-select: none;
-
-  background-color: #dfeded;
-  /*
-   
-  off-whites:
-  yellow: f9f3d6
-  another yellow: faefcd
-
-  light cyan: d7e4e4
-  darker light cyan: dfeded
-
-  foregrounds:
-
-   */
-
   margin: 0px;
   
 }
@@ -33,10 +18,39 @@ body {
 
 
 #page {
-  margin-left: 90px;
-  margin-right: 90px;
-  margin-top: 80px;
-  margin-bottom: 80px;
+  padding-left: 90px;
+  padding-right: 90px;
+  padding-top: 80px;
+  padding-bottom: 80px;
+}
+
+/* off-white backgrounds colors */
+.yellow-bg {
+  background-color: #fdeec8;
+  /*
+  yellow: f9f3d6
+  another yellow: faefcd
+   */
+}
+
+.purple-bg {
+  background-color: #f9e0fa;
+  /*
+  background:
+  deeper purp: f7b6f8
+
+  foreground
+  purple: cd40bb
+   */
+}
+
+.blue-bg {
+  background-color: #f1fafa;
+  /*
+  light cyan: d7e4e4
+  darker light cyan: dfeded
+   */
+
 }
 
 #header {
