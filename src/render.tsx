@@ -1,6 +1,10 @@
 import * as React from "react";
 import ReactDOM = require("react-dom");
+import { Helmet } from "react-helmet";
 import classNames from "classnames";
+import yellow_favicon from "./../assets/yellow-favicon.png";
+import purple_favicon from "./../assets/purple-favicon.png";
+import blue_favicon from "./../assets/blue-favicon.png";
 
 import project_metas from "./../assets/project_metas.json"
 
@@ -28,17 +32,23 @@ class Page extends React.Component {
 
     // default to yellow
     let bg_color = "yellow-bg";
+    let favicon_path = yellow_favicon;
     if (color_idx == 0) {
       bg_color = "yellow-bg";
+      favicon_path = yellow_favicon;
     } else if (color_idx == 1) {
       bg_color = "purple-bg";
+      favicon_path = purple_favicon;
     } else if (color_idx == 2) {
       bg_color = "blue-bg";
+      favicon_path = blue_favicon;
     }
-    // DEBUG
-    // bg_color = "yellow-bg";
     return (
       <div id="page" className={bg_color}>
+	<Helmet>
+	  <link rel="icon" type="image/x-icon" href={favicon_path}/>
+	  
+	</Helmet>
         <Header />
         <ProjectList />
       </div>
