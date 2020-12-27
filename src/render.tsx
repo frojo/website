@@ -9,10 +9,9 @@ import blue_favicon from "./../assets/blue-favicon.png";
 import project_metas from "./../assets/project_metas.json"
 
 
-// this runs on a tick
+// this is called on a tick
 function render() {
   const element = <Page />;
-
   ReactDOM.render(element, document.getElementById("root"));
 }
 
@@ -118,27 +117,31 @@ class ProjectItem extends React.Component {
       <div 
         className="project-item"
       >
-        <div
-          className={classNames({
-            "project-title": true,
-            "blacked-out": hovered,
-          })}
-          onMouseEnter={this.mouseEnter}
-          onMouseLeave={this.mouseLeave}
-        >
-          {project.title}
-        </div>
+	<a href={project.link}>
+	  <div
+            className={classNames({
+              "project-title": true,
+              "blacked-out": hovered,
+            })}
+            onMouseEnter={this.mouseEnter}
+            onMouseLeave={this.mouseLeave}
+          >
+            {project.title}
+          </div>
+	</a>
         <br></br>
-        <div 
-          className={classNames({
-            "project-subtitle": true,
-            "blacked-out": hovered,
-          })}
-          onMouseEnter={this.mouseEnter}
-          onMouseLeave={this.mouseLeave}
-        >
-          <i>{project.subtitle}</i>
-        </div>
+	<a href={project.link}>
+	  <div 
+            className={classNames({
+              "project-subtitle": true,
+              "blacked-out": hovered,
+            })}
+            onMouseEnter={this.mouseEnter}
+            onMouseLeave={this.mouseLeave}
+          >
+            <i>{project.subtitle}</i>
+          </div>
+	</a>
       </div>
     );}
 

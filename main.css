@@ -9,6 +9,12 @@ body {
   
 }
 
+/* get rid of default link styling */
+a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
 * {
   user-select: none !important;
 }
