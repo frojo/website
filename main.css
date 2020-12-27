@@ -15,6 +15,24 @@ a {
   text-decoration: inherit;
 }
 
+.yellow-link:visited {
+  color: #c4ad6c;
+}
+
+
+.purple-link:visited {
+  color: #bf89c2;
+}
+
+.blue-link:visited {
+  color: #6cc4bd;
+}
+
+.green-link:visited {
+  color: #6a9f70;
+}
+
+
 * {
   user-select: none !important;
 }
@@ -32,32 +50,21 @@ a {
 
 /* off-white backgrounds colors */
 .yellow-bg {
-  background-color: #fdeec8;
-  /*
-  yellow: f9f3d6
-  another yellow: faefcd
-   */
+  background-color: #FFF8E6;
 }
 
 .purple-bg {
-  background-color: #f9e0fa;
-  /*
-  background:
-  deeper purp: f7b6f8
-
-  foreground
-  purple: cd40bb
-   */
+  background-color: #fcebff;
 }
 
 .blue-bg {
-  background-color: #f1fafa;
-  /*
-  light cyan: d7e4e4
-  darker light cyan: dfeded
-   */
-
+  background-color: #efffff;
 }
+
+.green-bg {
+  background-color: #eaffee;
+}
+
 
 #header {
   font-size: 32px;
@@ -107,6 +114,7 @@ a {
 /* hover effects */
 
 .blacked-out {
+  color: black;
   background-color: black;
 }
 

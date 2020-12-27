@@ -5,6 +5,7 @@ import classNames from "classnames";
 import yellow_favicon from "./../assets/yellow-favicon.png";
 import purple_favicon from "./../assets/purple-favicon.png";
 import blue_favicon from "./../assets/blue-favicon.png";
+import green_favicon from "./../assets/green-favicon.png";
 
 import project_metas from "./../assets/project_metas.json"
 
@@ -21,7 +22,7 @@ class Page extends React.Component {
     super(props);
     this.state = {
       // pick one of 3 colors at random (do once per page load)
-      rand_color : Math.floor(Math.random() * 3)
+      rand_color : Math.floor(Math.random() * 4)
     };
 
   }
@@ -41,6 +42,9 @@ class Page extends React.Component {
     } else if (color_idx == 2) {
       bg_color = "blue-bg";
       favicon_path = blue_favicon;
+    } else if (color_idx == 3) {
+      bg_color = "green-bg";
+      favicon_path = green_favicon;
     }
     return (
       <div id="page" className={bg_color}>
@@ -49,7 +53,7 @@ class Page extends React.Component {
 	  
 	</Helmet>
         <Header />
-        <ProjectList />
+        <ProjectList color_idx={color_idx}/>
       </div>
     );}
 }
@@ -78,7 +82,8 @@ class ProjectList extends React.Component {
     return (
     <div id="project-list">
       {projects.map((project, idx) =>
-        <ProjectItem key={idx} project={project} />
+        <ProjectItem key={idx} project={project}
+                     color_idx={this.props.color_idx} />
     </div>
       
     );}
@@ -112,36 +117,48 @@ class ProjectItem extends React.Component {
   render() {
     const project = this.props.project;
     const { hovered } = this.state;
+    const color_idx = this.props.color_idx;
 
+    // default to yellow
+    let link_color = "yellow-link";
+    if (color_idx == 0) {
+      link_color = "yellow-link";
+    } else if (color_idx == 1) {
+      link_color = "purple-link";
+    } else if (color_idx == 2) {
+      link_color = "blue-link";
+    } else if (color_idx == 3) {
+      link_color = "green-link";
+    }
     return (
       <div 
         className="project-item"
       >
-	<a href={project.link}>
-	  <div
-            className={classNames({
-              "project-title": true,
-              "blacked-out": hovered,
-            })}
-            onMouseEnter={this.mouseEnter}
-            onMouseLeave={this.mouseLeave}
-          >
-            {project.title}
-          </div>
-	</a>
+	      <a className={link_color} href={project.link}>
+	        <div
+                  className={classNames({
+                    "project-title": true,
+                    "blacked-out": hovered,
+                  })}
+                  onMouseEnter={this.mouseEnter}
+                  onMouseLeave={this.mouseLeave}
+                >
+                  {project.title}
+                </div>
+	      </a>
         <br></br>
-	<a href={project.link}>
-	  <div 
-            className={classNames({
-              "project-subtitle": true,
-              "blacked-out": hovered,
-            })}
-            onMouseEnter={this.mouseEnter}
-            onMouseLeave={this.mouseLeave}
-          >
-            <i>{project.subtitle}</i>
-          </div>
-	</a>
+	      <a className={link_color} href={project.link}>
+	        <div 
+                  className={classNames({
+                    "project-subtitle": true,
+                    "blacked-out": hovered,
+                  })}
+                  onMouseEnter={this.mouseEnter}
+                  onMouseLeave={this.mouseLeave}
+                >
+                  <i>{project.subtitle}</i>
+                </div>
+	      </a>
       </div>
     );}
 
