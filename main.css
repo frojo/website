@@ -92,6 +92,11 @@ a {
   margin-right: 14px;
 }
 
+.header-menu-item:hover {
+  text-decoration: underline;
+  text-decoration-style: dashed;
+}
+
 #project-list {
 }
 

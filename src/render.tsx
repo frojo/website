@@ -1,5 +1,7 @@
 import * as React from "react";
 import ReactDOM = require("react-dom");
+import { BrowserRouter as Router, 
+         Switch, Route, Link} from 'react-router-dom';
 import { Helmet } from "react-helmet";
 import classNames from "classnames";
 import yellow_favicon from "./../assets/yellow-favicon.png";
@@ -48,12 +50,21 @@ class Page extends React.Component {
     }
     return (
       <div id="page" className={bg_color}>
-	<Helmet>
-	  <link rel="icon" type="image/x-icon" href={favicon_path}/>
-	  
-	</Helmet>
-        <Header />
-        <ProjectList color_idx={color_idx}/>
+	      <Helmet>
+	        <link rel="icon" type="image/x-icon" href={favicon_path} />
+	      </Helmet>
+
+        <Router>
+          <Header/>
+          <Switch>
+            <Route path="/about">
+              <About/>
+            </Route>
+            <Route path="/">
+              <ProjectList color_idx={color_idx} />
+            </Route>
+          </Switch>
+        </Router>
       </div>
     );}
 }
@@ -63,17 +74,33 @@ class Header extends React.Component {
   render() {
     return (
       <div id="header">
-        <div id="name"> fran</div>
+        <Link to="/">
+          <div id="name"> fran</div>
+        </Link>
+
         <div id="header-menu-wrapper">
-          <div className="header-menu-item"> work</div>
-          <div className="header-menu-item"> about</div>
-          <div className="header-menu-item"> blog</div>
+          <Link to="/">
+            <div className="header-menu-item">work</div>
+          </Link>
+          <Link to="/about">
+            <div className="header-menu-item">about</div>
+          </Link>
         </div>
       </div>
     );}
 }
+/* <div className="header-menu-item">blog</div> */
 
-// the clickable project name/subtitle link
+class About extends React.Component {
+  render() {
+    return (
+      <div>
+        i am fran
+      </div>
+    );}
+}
+
+// the clickable project name/subtitle links
 class ProjectList extends React.Component {
   render() {
     // maybe move this stuff into a constructor
