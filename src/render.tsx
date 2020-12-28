@@ -1,7 +1,9 @@
 import * as React from "react";
 import ReactDOM = require("react-dom");
 import { BrowserRouter as Router, 
-         Switch, Route, Link} from 'react-router-dom';
+         Switch, Route, Link, 
+         withRouter 
+       } from 'react-router-dom';
 import { Helmet } from "react-helmet";
 import classNames from "classnames";
 import yellow_favicon from "./../assets/yellow-favicon.png";
@@ -57,7 +59,7 @@ class Page extends React.Component {
 
         <div id="page">
           <Router>
-            <Header/>
+            <HeaderWithRouter/>
             <Switch>
               <Route exact path="/about">
                 <About/>
@@ -75,41 +77,35 @@ class Page extends React.Component {
 // the header at the top of the page throughout the website
 class Header extends React.Component {
   render() {
+    const path = this.props.location.pathname;
     return (
       <div id="header">
         <Link to="/">
           <div id="name"> fran</div>
         </Link>
-
         <div id="header-menu-wrapper">
-          <Switch>
-
-            {/* we're on the about page */}
-            <Route exact path="/about">
-              <Link to="/">
-                <div className="header-menu-item">work</div>
-              </Link>
-              <Link to="/about">
-                <div className="header-menu-item underline-dashed">about</div>
-              </Link>
-            </Route>
-
-            {/* we're on the home/work page */}
-            <Route exact path="/">
-              <Link to="/">
-                <div className="header-menu-item underline-dashed">work</div>
-              </Link>
-              <Link to="/about">
-                <div className="header-menu-item">about</div>
-              </Link>
-            </Route>
-
-          </Switch>
+          <Link to="/">
+            <div className={classNames({
+                            "header-menu-item": true,
+                            "underline-dashed": path == "/",
+                           })}
+            >work</div>
+          </Link>
+          <Link to="/about">
+            <div className={classNames({
+                            "header-menu-item": true,
+                            "underline-dashed": path == "/about",
+                           })}
+            >about</div>
+          </Link>
         </div>
       </div>
     );}
 }
 /* <div className="header-menu-item">blog</div> */
+
+// https://reactrouter.com/web/api/withRouter
+const HeaderWithRouter = withRouter(Header);
 
 class About extends React.Component {
   render() {
