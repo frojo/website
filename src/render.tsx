@@ -49,23 +49,26 @@ class Page extends React.Component {
       favicon_path = green_favicon;
     }
     return (
-      <div id="page" className={bg_color}>
+      <React.Fragment>
 	      <Helmet>
 	        <link rel="icon" type="image/x-icon" href={favicon_path} />
+          <body className={bg_color} />
 	      </Helmet>
 
-        <Router>
-          <Header/>
-          <Switch>
-            <Route path="/about">
-              <About/>
-            </Route>
-            <Route path="/">
-              <ProjectList color_idx={color_idx} />
-            </Route>
-          </Switch>
-        </Router>
-      </div>
+        <div id="page">
+          <Router>
+            <Header/>
+            <Switch>
+              <Route exact path="/about">
+                <About/>
+              </Route>
+              <Route exact path="/">
+                <ProjectList color_idx={color_idx} />
+              </Route>
+            </Switch>
+          </Router>
+        </div>
+      </React.Fragment>
     );}
 }
 
@@ -79,12 +82,29 @@ class Header extends React.Component {
         </Link>
 
         <div id="header-menu-wrapper">
-          <Link to="/">
-            <div className="header-menu-item">work</div>
-          </Link>
-          <Link to="/about">
-            <div className="header-menu-item">about</div>
-          </Link>
+          <Switch>
+
+            {/* we're on the about page */}
+            <Route exact path="/about">
+              <Link to="/">
+                <div className="header-menu-item">work</div>
+              </Link>
+              <Link to="/about">
+                <div className="header-menu-item underline-dashed">about</div>
+              </Link>
+            </Route>
+
+            {/* we're on the home/work page */}
+            <Route exact path="/">
+              <Link to="/">
+                <div className="header-menu-item underline-dashed">work</div>
+              </Link>
+              <Link to="/about">
+                <div className="header-menu-item">about</div>
+              </Link>
+            </Route>
+
+          </Switch>
         </div>
       </div>
     );}

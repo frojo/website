@@ -97,6 +97,12 @@ a {
   text-decoration-style: dashed;
 }
 
+/* to indicate what page we're on */
+.underline-dashed {
+  text-decoration: underline;
+  text-decoration-style: dashed;
+}
+
 #project-list {
 }
 
