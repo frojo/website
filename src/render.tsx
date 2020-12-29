@@ -11,6 +11,8 @@ import purple_favicon from "./../assets/purple-favicon.png";
 import blue_favicon from "./../assets/blue-favicon.png";
 import green_favicon from "./../assets/green-favicon.png";
 
+import waves from "./../assets/waves.gif";
+
 import project_metas from "./../assets/project_metas.json"
 
 
@@ -24,11 +26,23 @@ function render() {
 class Page extends React.Component {
   constructor(props) {
     super(props);
+
+    this.handleBackgroundChange = this.handleBackgroundChange.bind(this);
+
     this.state = {
       // pick one of 3 colors at random (do once per page load)
       rand_color : Math.floor(Math.random() * 4)
+    
+      // are we showing the waves background?
+      waves_bg: false;
     };
+  }
 
+  // callback for hoverable project items
+  handleBackgroundChange(waves) {
+    this.setState((state, props) => ({
+      waves_bg : waves;
+    }));
   }
 
   render() {
@@ -37,7 +51,10 @@ class Page extends React.Component {
     // default to yellow
     let bg_color = "yellow-bg";
     let favicon_path = yellow_favicon;
-    if (color_idx == 0) {
+    if (this.state.waves_bg) {
+      bg_color = "waves-bg";
+      favicon_path = waves;
+    } else if (color_idx == 0) {
       bg_color = "yellow-bg";
       favicon_path = yellow_favicon;
     } else if (color_idx == 1) {
@@ -50,10 +67,12 @@ class Page extends React.Component {
       bg_color = "green-bg";
       favicon_path = green_favicon;
     }
+    console.log(favicon_path);
     return (
       <React.Fragment>
 	      <Helmet>
 	        <link rel="icon" type="image/x-icon" href={favicon_path} />
+          {/* <body className="waves-bg" /> */}
           <body className={bg_color} />
 	      </Helmet>
 
@@ -65,7 +84,8 @@ class Page extends React.Component {
                 <About/>
               </Route>
               <Route exact path="/">
-                <ProjectList color_idx={color_idx} />
+                <ProjectList color_idx={color_idx}
+                             onHover={this.handleBackgroundChange} />
               </Route>
             </Switch>
           </Router>
@@ -125,8 +145,9 @@ class ProjectList extends React.Component {
     return (
     <div id="project-list">
       {projects.map((project, idx) =>
-        <ProjectItem key={idx} project={project}
-                     color_idx={this.props.color_idx} />
+        <WavesBackgroundProjectItem key={idx} project={project}
+                     color_idx={this.props.color_idx} 
+                     onHover={this.props.onHover} />
     </div>
       
     );}
@@ -134,7 +155,7 @@ class ProjectList extends React.Component {
 }
 
 // the clickable project name/subtitle link
-class ProjectItem extends React.Component {
+class BlackOutProjectItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -155,6 +176,76 @@ class ProjectItem extends React.Component {
     this.setState((state, props) => ({
       hovered : false;
     }));
+  }
+
+  render() {
+    const project = this.props.project;
+    const { hovered } = this.state;
+    const color_idx = this.props.color_idx;
+
+    // default to yellow
+    let link_color = "yellow-link";
+    if (color_idx == 0) {
+      link_color = "yellow-link";
+    } else if (color_idx == 1) {
+      link_color = "purple-link";
+    } else if (color_idx == 2) {
+      link_color = "blue-link";
+    } else if (color_idx == 3) {
+      link_color = "green-link";
+    }
+    return (
+      <div 
+        className="project-item"
+      >
+	      <a className={link_color} href={project.link}>
+	        <div
+                  className={classNames({
+                    "project-title": true,
+                    "blacked-out": hovered,
+                  })}
+                  onMouseEnter={this.mouseEnter}
+                  onMouseLeave={this.mouseLeave}
+                >
+                  {project.title}
+                </div>
+	      </a>
+        <br></br>
+	      <a className={link_color} href={project.link}>
+	        <div 
+                  className={classNames({
+                    "project-subtitle": true,
+                    "blacked-out": hovered,
+                  })}
+                  onMouseEnter={this.mouseEnter}
+                  onMouseLeave={this.mouseLeave}
+                >
+                  <i>{project.subtitle}</i>
+                </div>
+	      </a>
+      </div>
+    );}
+
+}
+
+// the clickable project name/subtitle link
+class WavesBackgroundProjectItem extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      hovered : false;
+    };
+
+    this.mouseEnter = this.mouseEnter.bind(this);
+    this.mouseLeave = this.mouseLeave.bind(this);
+  }
+
+  mouseEnter(e) {
+    this.props.onHover(true);
+  }
+
+  mouseLeave(e) {
+    this.props.onHover(false);
   }
 
   render() {
