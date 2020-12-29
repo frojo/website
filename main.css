@@ -6,7 +6,6 @@ body {
   height: 100vh;
   user-select: none;
   margin: 0px;
-  
 }
 
 /* get rid of default link styling */
@@ -18,7 +17,6 @@ a {
 .yellow-link:visited {
   color: #c4ad6c;
 }
-
 
 .purple-link:visited {
   color: #bf89c2;
@@ -68,7 +66,7 @@ a {
 
 #header {
   font-size: 32px;
-  margin-bottom: 80px;
+  margin-bottom: 48px;
 
   /* nice big aesthetic calming deadzones */
 
