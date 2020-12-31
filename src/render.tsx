@@ -57,8 +57,13 @@ class Page extends React.Component {
   // callback for hoverable project items
   handleBackgroundChange(waves) {
     this.setState((state, props) => ({
-      waves_bg : waves;
+      // waves_bg : waves;
     }));
+    if waves {
+      favloader.start();
+    } else {
+      favloader.stop();
+    }
   }
 
   render() {
@@ -71,8 +76,7 @@ class Page extends React.Component {
       bg_color = "waves-bg";
       // favicon_path = waves;
       favicon_path = waves_icon;
-      console.log('starting favicon');
-      favloader.start();
+      // console.log('starting favicon');
     } else if (color_idx == 0) {
       bg_color = "yellow-bg";
       favicon_path = yellow_favicon;
@@ -86,11 +90,11 @@ class Page extends React.Component {
       bg_color = "green-bg";
       favicon_path = green_favicon;
     }
-    console.log(favicon_path);
+    // console.log(favicon_path);
     return (
       <React.Fragment>
 	      <Helmet>
-	        <link rel="icon" type="image/gif" href={favicon_path} />
+          {/* <link rel="icon" type="image/gif" href={favicon_path} /> */}
           {/* <body className="waves-bg" /> */}
           <body className={bg_color} />
 	      </Helmet>
