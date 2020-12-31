@@ -8,7 +8,6 @@ import { BrowserRouter as Router,
 /* we love libraries */
 import { Helmet } from "react-helmet";
 import classNames from "classnames";
-import favloader from "favloader";
 
 /* i think these file imports are because of parcel? */
 import yellow_favicon from "./../assets/yellow-favicon.png";
@@ -19,17 +18,6 @@ import green_favicon from "./../assets/green-favicon.png";
 import waves_icon from "./../assets/waves-icon.gif";
 
 import project_metas from "./../assets/project_metas.json"
-
-
-function loadWavesGIFFavicon() {
-  console.log(parseGIF);
-
-  favloader.init({
-    gif: waves_icon
-  });
-}
-
-loadWavesGIFFavicon();
 
 
 // this is called on a tick
@@ -71,8 +59,6 @@ class Page extends React.Component {
       bg_color = "waves-bg";
       // favicon_path = waves;
       favicon_path = waves_icon;
-      console.log('starting favicon');
-      favloader.start();
     } else if (color_idx == 0) {
       bg_color = "yellow-bg";
       favicon_path = yellow_favicon;
