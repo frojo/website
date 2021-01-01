@@ -8,28 +8,14 @@ import { BrowserRouter as Router,
 /* we love libraries */
 import { Helmet } from "react-helmet";
 import classNames from "classnames";
-import favloader from "favloader";
 
-/* i think these file imports are because of parcel? */
 import yellow_favicon from "./../assets/yellow-favicon.png";
 import purple_favicon from "./../assets/purple-favicon.png";
 import blue_favicon from "./../assets/blue-favicon.png";
 import green_favicon from "./../assets/green-favicon.png";
-
 import waves_icon from "./../assets/waves-icon.gif";
 
 import project_metas from "./../assets/project_metas.json"
-
-
-function loadWavesGIFFavicon() {
-  console.log(parseGIF);
-
-  favloader.init({
-    gif: waves_icon
-  });
-}
-
-loadWavesGIFFavicon();
 
 
 // this is called on a tick
@@ -46,24 +32,22 @@ class Page extends React.Component {
     this.handleBackgroundChange = this.handleBackgroundChange.bind(this);
 
     this.state = {
-      // pick one of 3 colors at random (do once per page load)
-      rand_color : Math.floor(Math.random() * 4)
+      // pick a random color for various page stylings
+      rand_color : Math.floor(Math.random() * 4),
+
+      // pick a random hover effect
+      rand_effect : Math.floor(Math.random() * 2),
     
       // are we showing the waves background?
-      waves_bg: false;
+      waves_bg: false
     };
   }
 
   // callback for hoverable project items
   handleBackgroundChange(waves) {
     this.setState((state, props) => ({
-      // waves_bg : waves;
+      waves_bg : waves;
     }));
-    if waves {
-      favloader.start();
-    } else {
-      favloader.stop();
-    }
   }
 
   render() {
@@ -74,9 +58,7 @@ class Page extends React.Component {
     let favicon_path = yellow_favicon;
     if (this.state.waves_bg) {
       bg_color = "waves-bg";
-      // favicon_path = waves;
       favicon_path = waves_icon;
-      // console.log('starting favicon');
     } else if (color_idx == 0) {
       bg_color = "yellow-bg";
       favicon_path = yellow_favicon;
@@ -94,7 +76,12 @@ class Page extends React.Component {
     return (
       <React.Fragment>
 	      <Helmet>
-          {/* <link rel="icon" type="image/gif" href={favicon_path} /> */}
+          {/* type is gif for the waves hover effect
+              which only animates in firefox anyway
+              because google thinks it's not worth it to implement.
+              what else to do expect from a monopoly 
+          */}
+          <link rel="icon" type="image/gif" href={favicon_path} />
           {/* <body className="waves-bg" /> */}
           <body className={bg_color} />
 	      </Helmet>
@@ -108,6 +95,7 @@ class Page extends React.Component {
               </Route>
               <Route exact path="/">
                 <ProjectList color_idx={color_idx}
+                             hover_effect_idx={this.state.rand_effect}
                              onHover={this.handleBackgroundChange} />
               </Route>
             </Switch>
@@ -159,6 +147,36 @@ class About extends React.Component {
     );}
 }
 
+// todo: make a ProjectLayout type like how max does?
+// https://github.com/MaxBittker/walky/blob/master/src/render.tsx
+function renderProjectItem(project, idx: number) {
+    let project_item;
+    switch (this.props.hover_effect_idx) {
+      case 0:
+        project_item = <BlackOutProjectItem
+                         key={idx} project={project}
+                         color_idx={this.props.color_idx} 
+                         onHover={this.props.onHover} />;
+        break;
+      case 1:
+        project_item = <WavesBackgroundProjectItem 
+                         key={idx} project={project}
+                         color_idx={this.props.color_idx} 
+                         onHover={this.props.onHover} />;
+        break;
+      default:
+        project_item = <BlackOutProjectItem
+                         key={idx} project={project}
+                         color_idx={this.props.color_idx} 
+                         onHover={this.props.onHover} />;
+        break;
+
+    }
+
+    return project_item;
+
+}
+
 // the clickable project name/subtitle links
 class ProjectList extends React.Component {
   render() {
@@ -167,10 +185,7 @@ class ProjectList extends React.Component {
 
     return (
     <div id="project-list">
-      {projects.map((project, idx) =>
-        <WavesBackgroundProjectItem key={idx} project={project}
-                     color_idx={this.props.color_idx} 
-                     onHover={this.props.onHover} />
+      {projects.map(renderProjectItem, this)}
     </div>
       
     );}
