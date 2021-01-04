@@ -9,15 +9,15 @@ import { BrowserRouter as Router,
 import { Helmet } from "react-helmet";
 import classNames from "classnames";
 
-/* i think these file imports are because of parcel? */
 import yellow_favicon from "./../assets/yellow-favicon.png";
 import purple_favicon from "./../assets/purple-favicon.png";
 import blue_favicon from "./../assets/blue-favicon.png";
 import green_favicon from "./../assets/green-favicon.png";
-
 import waves_icon from "./../assets/waves-icon.gif";
 
 import project_metas from "./../assets/project_metas.json"
+
+const TEST = true;
 
 
 // this is called on a tick
@@ -34,11 +34,14 @@ class Page extends React.Component {
     this.handleBackgroundChange = this.handleBackgroundChange.bind(this);
 
     this.state = {
-      // pick one of 3 colors at random (do once per page load)
-      rand_color : Math.floor(Math.random() * 4)
+      // pick a random color for various page stylings
+      rand_color : Math.floor(Math.random() * 4),
+
+      // pick a random hover effect
+      rand_effect : Math.floor(Math.random() * 2),
     
       // are we showing the waves background?
-      waves_bg: false;
+      waves_bg: false
     };
   }
 
@@ -57,7 +60,6 @@ class Page extends React.Component {
     let favicon_path = yellow_favicon;
     if (this.state.waves_bg) {
       bg_color = "waves-bg";
-      // favicon_path = waves;
       favicon_path = waves_icon;
     } else if (color_idx == 0) {
       bg_color = "yellow-bg";
@@ -72,11 +74,16 @@ class Page extends React.Component {
       bg_color = "green-bg";
       favicon_path = green_favicon;
     }
-    console.log(favicon_path);
+    // console.log(favicon_path);
     return (
       <React.Fragment>
 	      <Helmet>
-	        <link rel="icon" type="image/gif" href={favicon_path} />
+          {/* type is gif for the waves hover effect
+              which only animates in firefox anyway
+              because google thinks it's not worth it to implement.
+              what else to do expect from a monopoly 
+          */}
+          <link rel="icon" type="image/gif" href={favicon_path} />
           {/* <body className="waves-bg" /> */}
           <body className={bg_color} />
 	      </Helmet>
@@ -90,6 +97,7 @@ class Page extends React.Component {
               </Route>
               <Route exact path="/">
                 <ProjectList color_idx={color_idx}
+                             hover_effect_idx={this.state.rand_effect}
                              onHover={this.handleBackgroundChange} />
               </Route>
             </Switch>
@@ -141,6 +149,45 @@ class About extends React.Component {
     );}
 }
 
+// todo: make a ProjectLayout type like how max does?
+// https://github.com/MaxBittker/walky/blob/master/src/render.tsx
+function renderProjectItem(project, idx: number) {
+    let project_item;
+
+    if (TEST) {
+      project_item = <RunAwayProjectItem
+                       key={idx} project={project}
+                       color_idx={this.props.color_idx} 
+                       onHover={this.props.onHover} />;
+      return project_item;
+    }
+    
+    switch (this.props.hover_effect_idx) {
+      case 0:
+        project_item = <BlackOutProjectItem
+                         key={idx} project={project}
+                         color_idx={this.props.color_idx} 
+                         onHover={this.props.onHover} />;
+        break;
+      case 1:
+        project_item = <WavesBackgroundProjectItem 
+                         key={idx} project={project}
+                         color_idx={this.props.color_idx} 
+                         onHover={this.props.onHover} />;
+        break;
+      default:
+        project_item = <BlackOutProjectItem
+                         key={idx} project={project}
+                         color_idx={this.props.color_idx} 
+                         onHover={this.props.onHover} />;
+        break;
+
+    }
+
+    return project_item;
+
+}
+
 // the clickable project name/subtitle links
 class ProjectList extends React.Component {
   render() {
@@ -149,10 +196,7 @@ class ProjectList extends React.Component {
 
     return (
     <div id="project-list">
-      {projects.map((project, idx) =>
-        <WavesBackgroundProjectItem key={idx} project={project}
-                     color_idx={this.props.color_idx} 
-                     onHover={this.props.onHover} />
+      {projects.map(renderProjectItem, this)}
     </div>
       
     );}
@@ -310,6 +354,190 @@ class WavesBackgroundProjectItem extends React.Component {
           blacked-out: true,
         })}
 */
+
+// the clickable project name/subtitle link
+class RunAwayProjectItem extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      hovered : false;
+    };
+
+    this.ref_orig = React.createRef();
+    this.ref_moving = React.createRef();
+
+    this.mouseEnter = this.mouseEnter.bind(this);
+    this.mouseLeave = this.mouseLeave.bind(this);
+  }
+
+  mouseEnter(e) {
+    console.log("entering");
+    this.setState((state, props) => ({
+      hovered : true,
+    }));
+    if (this.ref_orig && this.ref_orig.current) {
+      const bb = this.ref_orig.current.getBoundingClientRect();
+      const bodybb = document.body.getBoundingClientRect();
+      console.log("bb: ");
+      console.log(bb);
+      console.log("bodybb: ");
+      console.log(bodybb);
+      console.log(window.scrollY);
+      this.setState((state, props) => ({
+        x: bb.x - 50, y: bb.y, }));
+    }
+  }
+
+  mouseLeave(e) {
+    if (this.ref_moving.current) {
+      const bb = this.ref_moving.current.getBoundingClientRect();
+      console.log(bb);
+    } else {
+      console.log('moving ref null');
+    }
+    this.setState((state, props) => ({
+      hovered : false;
+    }));
+  }
+
+  renderInvisibleProjectItem(invisible) {
+    const project = this.props.project;
+    const { hovered } = this.state;
+    const color_idx = this.props.color_idx;
+
+    // default to yellow
+    let link_color = "yellow-link";
+    if (color_idx == 0) {
+      link_color = "yellow-link";
+    } else if (color_idx == 1) {
+      link_color = "purple-link";
+    } else if (color_idx == 2) {
+      link_color = "blue-link";
+    } else if (color_idx == 3) {
+      link_color = "green-link";
+    }
+
+    let s = {};
+    if (invisible) {
+      // using "visibility" makes hover effects not work anymore
+      s = { opacity: 0 };
+    } 
+
+    return(
+      <div 
+        className="project-item"
+        style={s}
+      >
+	      <a ref={this.ref_orig} className={link_color} href={project.link}>
+	        <div
+                  className="project-title"
+                  onMouseEnter={this.mouseEnter}
+                  onMouseLeave={this.mouseLeave}
+                >
+                  {project.title}
+                </div>
+	      </a>
+        <br></br>
+	      <a className={link_color} href={project.link}>
+	        <div 
+                  className="project-subtitle"
+                  onMouseEnter={this.mouseEnter}
+                  onMouseLeave={this.mouseLeave}
+                >
+                  <i>{project.subtitle}</i>
+                </div>
+	      </a>
+      </div>
+    );
+  }
+
+  renderMovingProjectItem() {
+    const project = this.props.project;
+    const { hovered } = this.state;
+    const color_idx = this.props.color_idx;
+
+    // default to yellow
+    let link_color = "yellow-link";
+    if (color_idx == 0) {
+      link_color = "yellow-link";
+    } else if (color_idx == 1) {
+      link_color = "purple-link";
+    } else if (color_idx == 2) {
+      link_color = "blue-link";
+    } else if (color_idx == 3) {
+      link_color = "green-link";
+    }
+
+    return(
+      <div 
+        className="project-item"
+        style={{
+          position: "fixed",
+          left: this.state.x,
+          top: this.state.y,
+        }}
+      >
+	      <a ref={this.ref_moving} className={link_color} href={project.link}>
+	        <div
+                  className="project-title"
+                  onMouseEnter={null}
+                  onMouseLeave={null}
+                >
+                  {project.title}
+                </div>
+	      </a>
+        <br></br>
+	      <a className={link_color} href={project.link}>
+	        <div 
+                  className="project-subtitle"
+                  onMouseEnter={null}
+                  onMouseLeave={null}
+                >
+                  <i>{project.subtitle}</i>
+                </div>
+	      </a>
+      </div>
+    );
+  }
+
+  render() {
+    const project = this.props.project;
+    const { hovered } = this.state;
+    const color_idx = this.props.color_idx;
+
+    // default to yellow
+    let link_color = "yellow-link";
+    if (color_idx == 0) {
+      link_color = "yellow-link";
+    } else if (color_idx == 1) {
+      link_color = "purple-link";
+    } else if (color_idx == 2) {
+      link_color = "blue-link";
+    } else if (color_idx == 3) {
+      link_color = "green-link";
+    }
+
+    if (!this.state.hovered) {
+     return this.renderInvisibleProjectItem(false);
+
+    } else {
+      // we "render" an invisible version to keep page layout fine
+      const invisible_copy = this.renderInvisibleProjectItem(true);
+      const moving_elm = this.renderMovingProjectItem();
+    return (
+      <React.Fragment>
+      {invisible_copy}
+      {moving_elm}
+      </React.Fragment>
+    );
+
+    }
+
+
+
+  
+  }
+}
 
 
 export { render };

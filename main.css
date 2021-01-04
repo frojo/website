@@ -132,6 +132,7 @@ a {
 /* hover effects */
 
 .blacked-out {
+  left: 1000px;
   color: black;
   background-color: black;
 }
