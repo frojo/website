@@ -17,8 +17,6 @@ import waves_icon from "./../assets/waves-icon.gif";
 
 import project_metas from "./../assets/project_metas.json"
 
-const TEST = true;
-
 
 // this is called on a tick
 function render() {
@@ -38,7 +36,7 @@ class Page extends React.Component {
       rand_color : Math.floor(Math.random() * 4),
 
       // pick a random hover effect
-      rand_effect : Math.floor(Math.random() * 2),
+      rand_effect : Math.floor(Math.random() * 3),
     
       // are we showing the waves background?
       waves_bg: false
@@ -153,14 +151,6 @@ class About extends React.Component {
 // https://github.com/MaxBittker/walky/blob/master/src/render.tsx
 function renderProjectItem(project, idx: number) {
     let project_item;
-
-    if (TEST) {
-      project_item = <RunAwayProjectItem
-                       key={idx} project={project}
-                       color_idx={this.props.color_idx} 
-                       onHover={this.props.onHover} />;
-      return project_item;
-    }
     
     switch (this.props.hover_effect_idx) {
       case 0:
@@ -175,6 +165,12 @@ function renderProjectItem(project, idx: number) {
                          color_idx={this.props.color_idx} 
                          onHover={this.props.onHover} />;
         break;
+      case 2:
+	project_item = <InvisibleProjectItem
+      	                 key={idx} project={project}
+      	                 color_idx={this.props.color_idx} 
+      	                 onHover={this.props.onHover} />;
+	break;
       default:
         project_item = <BlackOutProjectItem
                          key={idx} project={project}
@@ -356,51 +352,30 @@ class WavesBackgroundProjectItem extends React.Component {
 */
 
 // the clickable project name/subtitle link
-class RunAwayProjectItem extends React.Component {
+class InvisibleProjectItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       hovered : false;
     };
 
-    this.ref_orig = React.createRef();
-    this.ref_moving = React.createRef();
-
     this.mouseEnter = this.mouseEnter.bind(this);
     this.mouseLeave = this.mouseLeave.bind(this);
   }
 
   mouseEnter(e) {
-    console.log("entering");
     this.setState((state, props) => ({
       hovered : true,
     }));
-    if (this.ref_orig && this.ref_orig.current) {
-      const bb = this.ref_orig.current.getBoundingClientRect();
-      const bodybb = document.body.getBoundingClientRect();
-      console.log("bb: ");
-      console.log(bb);
-      console.log("bodybb: ");
-      console.log(bodybb);
-      console.log(window.scrollY);
-      this.setState((state, props) => ({
-        x: bb.x - 50, y: bb.y, }));
-    }
   }
 
   mouseLeave(e) {
-    if (this.ref_moving.current) {
-      const bb = this.ref_moving.current.getBoundingClientRect();
-      console.log(bb);
-    } else {
-      console.log('moving ref null');
-    }
     this.setState((state, props) => ({
       hovered : false;
     }));
   }
 
-  renderInvisibleProjectItem(invisible) {
+  renderInvisibleProjectItem() {
     const project = this.props.project;
     const { hovered } = this.state;
     const color_idx = this.props.color_idx;
@@ -418,7 +393,7 @@ class RunAwayProjectItem extends React.Component {
     }
 
     let s = {};
-    if (invisible) {
+    if (this.state.hovered) {
       // using "visibility" makes hover effects not work anymore
       s = { opacity: 0 };
     } 
@@ -451,91 +426,8 @@ class RunAwayProjectItem extends React.Component {
     );
   }
 
-  renderMovingProjectItem() {
-    const project = this.props.project;
-    const { hovered } = this.state;
-    const color_idx = this.props.color_idx;
-
-    // default to yellow
-    let link_color = "yellow-link";
-    if (color_idx == 0) {
-      link_color = "yellow-link";
-    } else if (color_idx == 1) {
-      link_color = "purple-link";
-    } else if (color_idx == 2) {
-      link_color = "blue-link";
-    } else if (color_idx == 3) {
-      link_color = "green-link";
-    }
-
-    return(
-      <div 
-        className="project-item"
-        style={{
-          position: "fixed",
-          left: this.state.x,
-          top: this.state.y,
-        }}
-      >
-	      <a ref={this.ref_moving} className={link_color} href={project.link}>
-	        <div
-                  className="project-title"
-                  onMouseEnter={null}
-                  onMouseLeave={null}
-                >
-                  {project.title}
-                </div>
-	      </a>
-        <br></br>
-	      <a className={link_color} href={project.link}>
-	        <div 
-                  className="project-subtitle"
-                  onMouseEnter={null}
-                  onMouseLeave={null}
-                >
-                  <i>{project.subtitle}</i>
-                </div>
-	      </a>
-      </div>
-    );
-  }
-
   render() {
-    const project = this.props.project;
-    const { hovered } = this.state;
-    const color_idx = this.props.color_idx;
-
-    // default to yellow
-    let link_color = "yellow-link";
-    if (color_idx == 0) {
-      link_color = "yellow-link";
-    } else if (color_idx == 1) {
-      link_color = "purple-link";
-    } else if (color_idx == 2) {
-      link_color = "blue-link";
-    } else if (color_idx == 3) {
-      link_color = "green-link";
-    }
-
-    if (!this.state.hovered) {
-     return this.renderInvisibleProjectItem(false);
-
-    } else {
-      // we "render" an invisible version to keep page layout fine
-      const invisible_copy = this.renderInvisibleProjectItem(true);
-      const moving_elm = this.renderMovingProjectItem();
-    return (
-      <React.Fragment>
-      {invisible_copy}
-      {moving_elm}
-      </React.Fragment>
-    );
-
-    }
-
-
-
-  
+    return this.renderInvisibleProjectItem();
   }
 }
 
