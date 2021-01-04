@@ -13,7 +13,9 @@ import yellow_favicon from "./../assets/yellow-favicon.png";
 import purple_favicon from "./../assets/purple-favicon.png";
 import blue_favicon from "./../assets/blue-favicon.png";
 import green_favicon from "./../assets/green-favicon.png";
-import waves_icon from "./../assets/waves-icon.gif";
+
+import black_favicon from "./../assets/black-favicon.png";
+import waves_favicon from "./../assets/waves-icon.gif";
 
 import project_metas from "./../assets/project_metas.json"
 
@@ -36,7 +38,7 @@ class Page extends React.Component {
       rand_color : Math.floor(Math.random() * 4),
 
       // pick a random hover effect
-      rand_effect : Math.floor(Math.random() * 3),
+      rand_effect : Math.floor(Math.random() * 5),
     
       // are we showing the waves background?
       waves_bg: false
@@ -44,10 +46,18 @@ class Page extends React.Component {
   }
 
   // callback for hoverable project items
-  handleBackgroundChange(waves) {
-    this.setState((state, props) => ({
-      waves_bg : waves;
-    }));
+  handleBackgroundChange(bg, favicon) {
+    // special case
+    if (bg == "new") {
+      this.setState((state, props) => ({
+        rand_color : Math.floor(Math.random() * 4),
+      }));
+    } else {
+      this.setState((state, props) => ({
+        hover_bg : bg;
+        hover_favicon : favicon;
+      }));
+    }
   }
 
   render() {
@@ -56,9 +66,9 @@ class Page extends React.Component {
     // default to yellow
     let bg_color = "yellow-bg";
     let favicon_path = yellow_favicon;
-    if (this.state.waves_bg) {
-      bg_color = "waves-bg";
-      favicon_path = waves_icon;
+    if (this.state.hover_bg) {
+      bg_color = this.state.hover_bg;
+      favicon_path = this.state.hover_favicon;
     } else if (color_idx == 0) {
       bg_color = "yellow-bg";
       favicon_path = yellow_favicon;
@@ -79,7 +89,7 @@ class Page extends React.Component {
           {/* type is gif for the waves hover effect
               which only animates in firefox anyway
               because google thinks it's not worth it to implement.
-              what else to do expect from a monopoly 
+              but what else would you expect from google
           */}
           <link rel="icon" type="image/gif" href={favicon_path} />
           {/* <body className="waves-bg" /> */}
@@ -152,13 +162,6 @@ class About extends React.Component {
 function renderProjectItem(project, idx: number) {
     let project_item;
 
-    // TEST
-      project_item = <WavesBackgroundProjectItemNew
-                     key={idx} project={project}
-                     color_idx={this.props.color_idx} 
-                     onHover={this.props.onHover} />;
-    return project_item;
-    
     switch (this.props.hover_effect_idx) {
       case 0:
         project_item = <BlackOutProjectItem
@@ -173,11 +176,23 @@ function renderProjectItem(project, idx: number) {
                          onHover={this.props.onHover} />;
         break;
       case 2:
-	project_item = <InvisibleProjectItem
+	    project_item = <InvisibleProjectItem
       	                 key={idx} project={project}
       	                 color_idx={this.props.color_idx} 
       	                 onHover={this.props.onHover} />;
-	break;
+	      break;
+      case 3:
+	      project_item = <BlackBackgroundProjectItem
+      	                 key={idx} project={project}
+      	                 color_idx={this.props.color_idx} 
+      	                 onHover={this.props.onHover} />;
+	      break;
+      case 4:
+	      project_item = <NewColorProjectItem
+      	                 key={idx} project={project}
+      	                 color_idx={this.props.color_idx} 
+      	                 onHover={this.props.onHover} />;
+	      break;
       default:
         project_item = <BlackOutProjectItem
                          key={idx} project={project}
@@ -222,15 +237,17 @@ class ProjectListItem extends React.Component {
     this.setState((state, props) => ({
       hovered : true;
     }));
-    this.props.onHover(true);
+    this.props.onHover(this.props.hovered_bg, 
+                       this.props.hovered_favicon);
+    console.log("mouse entered");
   }
 
   mouseLeave(e) {
-    console.log('left hovered');
     this.setState((state, props) => ({
       hovered : false;
     }));
-    this.props.onHover(false);
+    this.props.onHover("", "");
+    console.log("mouse left");
   }
 
   render() {
@@ -250,94 +267,63 @@ class ProjectListItem extends React.Component {
       link_color = "green-link";
     }
 
-    console.log(this.props.hovered_style);
 
-    // default case
     if (!this.state.hovered) {
-      <div 
-        className="project-item"
-      >
-	      <a className={link_color} href={project.link}>
-	        <div
-                  className="project-title"
-                  onMouseEnter={this.mouseEnter}
-                  onMouseLeave={this.mouseLeave}
-                >
-                  {project.title}
-                </div>
-	      </a>
-        <br></br>
-	      <a className={link_color} href={project.link}>
-	        <div 
-                  className="project-subtitle"
-                  onMouseEnter={this.mouseEnter}
-                  onMouseLeave={this.mouseLeave}
-                >
-                  <i>{project.subtitle}</i>
-                </div>
-	      </a>
-      </div>
-
+        return (
+          <div 
+          className="project-item"
+        >
+          <a className={link_color} href={project.link}>
+            <div
+                    className="project-title"
+                    onMouseEnter={this.mouseEnter}
+                    onMouseLeave={this.mouseLeave}
+                  >
+                    {project.title}
+                  </div>
+          </a>
+          <br></br>
+          <a className={link_color} href={project.link}>
+            <div 
+                    className="project-subtitle"
+                    onMouseEnter={this.mouseEnter}
+                    onMouseLeave={this.mouseLeave}
+                  >
+                    <i>{project.subtitle}</i>
+                  </div>
+          </a>
+        </div>
+      );
     // hovered case
     } else {
-      <div 
-        className="project-item"
-      >
-      <p></p>
-	      <a className={link_color} href={project.link}>
-	        <div
-                  className={`project-title ${this.props.hovered_style}`}
-                  onMouseEnter={this.mouseEnter}
-                  onMouseLeave={this.mouseLeave}
-                >
-                  {project.title}
-                </div>
-	      </a>
-        <br></br>
-	      <a className={link_color} href={project.link}>
-	        <div 
-                  className={`project-subtitle ${this.props.hovered_style}`}
-                  onMouseEnter={this.mouseEnter}
-                  onMouseLeave={this.mouseLeave}
-                >
-                  <i>{project.subtitle}</i>
-                </div>
-	      </a>
-      </div>
-
+      return (
+        <div 
+          className="project-item"
+        >
+        <p></p>
+	        <a className={link_color} href={project.link}>
+	          <div
+                    className={`project-title ${this.props.hovered_style}`}
+                    onMouseEnter={this.mouseEnter}
+                    onMouseLeave={this.mouseLeave}
+                  >
+                    {project.title}
+                  </div>
+	        </a>
+          <br></br>
+	        <a className={link_color} href={project.link}>
+	          <div 
+                    className={`project-subtitle ${this.props.hovered_style}`}
+                    onMouseEnter={this.mouseEnter}
+                    onMouseLeave={this.mouseLeave}
+                  >
+                    <i>{project.subtitle}</i>
+                  </div>
+	        </a>
+        </div>
+      );
     }
-    return (
-      <div 
-        className="project-item"
-      >
-	      <a className={link_color} href={project.link}>
-	        <div
-                  className={classNames({
-                    "project-title": true,
-                    "blacked-out": hovered,
-                  })}
-                  onMouseEnter={this.mouseEnter}
-                  onMouseLeave={this.mouseLeave}
-                >
-                  {project.title}
-                </div>
-	      </a>
-        <br></br>
-	      <a className={link_color} href={project.link}>
-	        <div 
-                  className={classNames({
-                    "project-subtitle": true,
-                    "blacked-out": hovered,
-                  })}
-                  onMouseEnter={this.mouseEnter}
-                  onMouseLeave={this.mouseLeave}
-                >
-                  <i>{project.subtitle}</i>
-                </div>
-	      </a>
-      </div>
-    );}
-
+  }
 }
 
 // censored
@@ -345,180 +331,57 @@ class BlackOutProjectItem extends React.Component {
   constructor(props) {
     super(props);
   }
+
   render() {
     return <ProjectListItem {...this.props}
 			    hovered_style="blacked-out" />;
   );}
-
 }
-class WavesBackgroundProjectItemNew extends React.Component {
+
+class WavesBackgroundProjectItem extends React.Component {
   constructor(props) {
     super(props);
   }
   render() {
     return <ProjectListItem {...this.props}
-			    hovered_style="" />;
+			    hovered_style=""
+          hovered_bg="waves-bg" hovered_favicon={waves_favicon} />;
   );}
-
 }
 
-// the clickable project name/subtitle link
-class WavesBackgroundProjectItem extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      hovered : false;
-    };
-
-    this.mouseEnter = this.mouseEnter.bind(this);
-    this.mouseLeave = this.mouseLeave.bind(this);
-  }
-
-  mouseEnter(e) {
-    this.props.onHover(true);
-  }
-
-  mouseLeave(e) {
-    this.props.onHover(false);
-  }
-
-  render() {
-    const project = this.props.project;
-    const { hovered } = this.state;
-    const color_idx = this.props.color_idx;
-
-    // default to yellow
-    let link_color = "yellow-link";
-    if (color_idx == 0) {
-      link_color = "yellow-link";
-    } else if (color_idx == 1) {
-      link_color = "purple-link";
-    } else if (color_idx == 2) {
-      link_color = "blue-link";
-    } else if (color_idx == 3) {
-      link_color = "green-link";
-    }
-    return (
-      <div 
-        className="project-item"
-      >
-	      <a className={link_color} href={project.link}>
-	        <div
-                  className={classNames({
-                    "project-title": true,
-                    "blacked-out": hovered,
-                  })}
-                  onMouseEnter={this.mouseEnter}
-                  onMouseLeave={this.mouseLeave}
-                >
-                  {project.title}
-                </div>
-	      </a>
-        <br></br>
-	      <a className={link_color} href={project.link}>
-	        <div 
-                  className={classNames({
-                    "project-subtitle": true,
-                    "blacked-out": hovered,
-                  })}
-                  onMouseEnter={this.mouseEnter}
-                  onMouseLeave={this.mouseLeave}
-                >
-                  <i>{project.subtitle}</i>
-                </div>
-	      </a>
-      </div>
-    );}
-
-}
-/* 
-        className="project-item"
-        className={classNames({"project-item": true})}
-        className={classNames({
-          project-item: true,
-          blacked-out: true,
-        })}
-*/
-
-// the clickable project name/subtitle link
 class InvisibleProjectItem extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      hovered : false;
-    };
-
-    this.mouseEnter = this.mouseEnter.bind(this);
-    this.mouseLeave = this.mouseLeave.bind(this);
-  }
-
-  mouseEnter(e) {
-    this.setState((state, props) => ({
-      hovered : true,
-    }));
-  }
-
-  mouseLeave(e) {
-    this.setState((state, props) => ({
-      hovered : false;
-    }));
-  }
-
-  renderInvisibleProjectItem() {
-    const project = this.props.project;
-    const { hovered } = this.state;
-    const color_idx = this.props.color_idx;
-
-    // default to yellow
-    let link_color = "yellow-link";
-    if (color_idx == 0) {
-      link_color = "yellow-link";
-    } else if (color_idx == 1) {
-      link_color = "purple-link";
-    } else if (color_idx == 2) {
-      link_color = "blue-link";
-    } else if (color_idx == 3) {
-      link_color = "green-link";
-    }
-
-    let s = {};
-    if (this.state.hovered) {
-      // using "visibility" makes hover effects not work anymore
-      s = { opacity: 0 };
-    } 
-
-    return(
-      <div 
-        className="project-item"
-        style={s}
-      >
-	      <a ref={this.ref_orig} className={link_color} href={project.link}>
-	        <div
-                  className="project-title"
-                  onMouseEnter={this.mouseEnter}
-                  onMouseLeave={this.mouseLeave}
-                >
-                  {project.title}
-                </div>
-	      </a>
-        <br></br>
-	      <a className={link_color} href={project.link}>
-	        <div 
-                  className="project-subtitle"
-                  onMouseEnter={this.mouseEnter}
-                  onMouseLeave={this.mouseLeave}
-                >
-                  <i>{project.subtitle}</i>
-                </div>
-	      </a>
-      </div>
-    );
   }
 
   render() {
-    return this.renderInvisibleProjectItem();
-  }
+    return <ProjectListItem {...this.props}
+			    hovered_style="invisible" />;
+  );}
 }
 
+class BlackBackgroundProjectItem extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return <ProjectListItem {...this.props}
+			    hovered_style=""
+          hovered_bg="black-bg" hovered_favicon={black_favicon} />;
+  );}
+}
+
+class NewColorProjectItem extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return <ProjectListItem {...this.props}
+			    hovered_style=""
+          hovered_bg="new" hovered_favicon="" />;
+  );}
+}
 
 export { render };
