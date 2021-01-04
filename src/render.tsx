@@ -45,13 +45,22 @@ class Page extends React.Component {
     };
   }
 
+  pickNewColor(state, props) {
+    const curr_color = state.rand_color;
+    let new_color = Math.floor(Math.random() * 4);
+    while (new_color == curr_color) {
+      new_color = Math.floor(Math.random() * 4);
+    }
+    return ({
+      rand_color : new_color
+    });
+  }
+
   // callback for hoverable project items
   handleBackgroundChange(bg, favicon) {
     // special case
     if (bg == "new") {
-      this.setState((state, props) => ({
-        rand_color : Math.floor(Math.random() * 4),
-      }));
+      this.setState(this.pickNewColor);
     } else {
       this.setState((state, props) => ({
         hover_bg : bg;
