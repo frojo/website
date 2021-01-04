@@ -151,6 +151,13 @@ class About extends React.Component {
 // https://github.com/MaxBittker/walky/blob/master/src/render.tsx
 function renderProjectItem(project, idx: number) {
     let project_item;
+
+    // TEST
+      project_item = <WavesBackgroundProjectItemNew
+                     key={idx} project={project}
+                     color_idx={this.props.color_idx} 
+                     onHover={this.props.onHover} />;
+    return project_item;
     
     switch (this.props.hover_effect_idx) {
       case 0:
@@ -200,7 +207,7 @@ class ProjectList extends React.Component {
 }
 
 // the clickable project name/subtitle link
-class BlackOutProjectItem extends React.Component {
+class ProjectListItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -215,12 +222,15 @@ class BlackOutProjectItem extends React.Component {
     this.setState((state, props) => ({
       hovered : true;
     }));
+    this.props.onHover(true);
   }
 
   mouseLeave(e) {
+    console.log('left hovered');
     this.setState((state, props) => ({
       hovered : false;
     }));
+    this.props.onHover(false);
   }
 
   render() {
@@ -238,6 +248,63 @@ class BlackOutProjectItem extends React.Component {
       link_color = "blue-link";
     } else if (color_idx == 3) {
       link_color = "green-link";
+    }
+
+    console.log(this.props.hovered_style);
+
+    // default case
+    if (!this.state.hovered) {
+      <div 
+        className="project-item"
+      >
+	      <a className={link_color} href={project.link}>
+	        <div
+                  className="project-title"
+                  onMouseEnter={this.mouseEnter}
+                  onMouseLeave={this.mouseLeave}
+                >
+                  {project.title}
+                </div>
+	      </a>
+        <br></br>
+	      <a className={link_color} href={project.link}>
+	        <div 
+                  className="project-subtitle"
+                  onMouseEnter={this.mouseEnter}
+                  onMouseLeave={this.mouseLeave}
+                >
+                  <i>{project.subtitle}</i>
+                </div>
+	      </a>
+      </div>
+
+    // hovered case
+    } else {
+      <div 
+        className="project-item"
+      >
+      <p></p>
+	      <a className={link_color} href={project.link}>
+	        <div
+                  className={`project-title ${this.props.hovered_style}`}
+                  onMouseEnter={this.mouseEnter}
+                  onMouseLeave={this.mouseLeave}
+                >
+                  {project.title}
+                </div>
+	      </a>
+        <br></br>
+	      <a className={link_color} href={project.link}>
+	        <div 
+                  className={`project-subtitle ${this.props.hovered_style}`}
+                  onMouseEnter={this.mouseEnter}
+                  onMouseLeave={this.mouseLeave}
+                >
+                  <i>{project.subtitle}</i>
+                </div>
+	      </a>
+      </div>
+
     }
     return (
       <div 
@@ -270,6 +337,28 @@ class BlackOutProjectItem extends React.Component {
 	      </a>
       </div>
     );}
+
+}
+
+// censored
+class BlackOutProjectItem extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return <ProjectListItem {...this.props}
+			    hovered_style="blacked-out" />;
+  );}
+
+}
+class WavesBackgroundProjectItemNew extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return <ProjectListItem {...this.props}
+			    hovered_style="" />;
+  );}
 
 }
 
