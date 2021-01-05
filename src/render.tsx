@@ -131,7 +131,7 @@ class Header extends React.Component {
     return (
       <div id="header">
         <Link to="/">
-          <div id="name"> fran</div>
+          <Name />
         </Link>
         <div id="header-menu-wrapper">
           <Link to="/">
@@ -156,6 +156,47 @@ class Header extends React.Component {
 
 // https://reactrouter.com/web/api/withRouter
 const HeaderWithRouter = withRouter(Header);
+
+class Name extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      hovered : false;
+    };
+
+    this.mouseEnter = this.mouseEnter.bind(this);
+    this.mouseLeave = this.mouseLeave.bind(this);
+  }
+
+  mouseEnter(e) {
+    this.setState((state, props) => ({
+      hovered : true;
+    }));
+  }
+
+  mouseLeave(e) {
+    this.setState((state, props) => ({
+      hovered : false;
+    }));
+  }
+
+  render() {
+
+    let name;
+    if (!this.state.hovered) {
+      name = "fran";
+    } else {
+      name = "Francisco \"Mo\" Osvaldo Rojo-Ilvento";
+    }
+    return (
+      <div id="name"
+           onMouseEnter={this.mouseEnter}
+           onMouseLeave={this.mouseLeave}> 
+        {name}
+      </div>
+    );}
+}
+/* <div className="header-menu-item">blog</div> */
 
 class About extends React.Component {
   render() {
@@ -248,7 +289,6 @@ class ProjectListItem extends React.Component {
     }));
     this.props.onHover(this.props.hovered_bg, 
                        this.props.hovered_favicon);
-    console.log("mouse entered");
   }
 
   mouseLeave(e) {
@@ -256,7 +296,6 @@ class ProjectListItem extends React.Component {
       hovered : false;
     }));
     this.props.onHover("", "");
-    console.log("mouse left");
   }
 
   render() {
