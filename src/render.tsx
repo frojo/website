@@ -14,13 +14,20 @@ import purple_favicon from "./../assets/purple-favicon.png";
 import blue_favicon from "./../assets/blue-favicon.png";
 import green_favicon from "./../assets/green-favicon.png";
 
+// special favicons for special effects
 import black_favicon from "./../assets/black-favicon.png";
 import waves_favicon from "./../assets/waves-icon.gif";
 
 import project_metas from "./../assets/project_metas.json"
 
 
-// themes 
+// colors
+const BG_COLORS = ["yellow-bg", "purple-bg", 
+                     "blue-bg", "green-bg"];
+
+const FAVICONS = [yellow_favicon, purple_favicon, 
+                  blue_favicon, green_favicon];
+
 const LINK_COLORS = ["yellow-link", "purple-link", 
                      "blue-link", "green-link"];
 
@@ -39,15 +46,19 @@ class Page extends React.Component {
   constructor(props) {
     super(props);
 
-    this.handleBackgroundChange = this.handleBackgroundChange.bind(this);
     this.onThemeHover = this.onThemeHover.bind(this);
+
+    const color = this.pickNewColor(-1);
 
     this.state = {
       // pick a random color for various page stylings
-      color : Math.floor(Math.random() * 4),
+      color : color,
 
       // pick a random hover effect
       effect : Math.floor(Math.random() * 5),
+      
+      bg_color : BG_COLORS[color],
+      favicon : FAVICONS[color],
     
       // are we showing the waves background?
       waves_bg: false
@@ -56,84 +67,78 @@ class Page extends React.Component {
   
   themeContext(color, effect) {
     return({
-      link_color : LINK_COLORS[color]
+      link_color : LINK_COLORS[color],
+      hover_style : hoverStyle(effect),
       onLinkHover : this.onThemeHover;
     });
   }
 
+  // picks a random color that isn't the supplied one
+  pickNewColor(exclude_color) { 
+    let new_color = Math.floor(Math.random() * 4);
+    while (new_color == exclude_color) {
+      new_color = Math.floor(Math.random() * 4);
+    }
+    return new_color;
+  }
+
+  // sets theme to a new color
+  newDefaultColor(state, props) { 
+    const new_color = this.pickNewColor(state.color);
+    return ({
+      color : new_color,
+      bg_color : BG_COLORS[new_color],
+      favicon : FAVICONS[new_color],
+    });
+  }
+
+
   // callback for hoverable project items
   onThemeHover(hover) {
-    console.log("changing theme, hover=" + hover);
     if (hover) {
       // 0: blackout link
       // 1: waves
       // 2: invisible link
       // 3: black background
       // 4: new color
-      if (this.state.effect == 1) {
-        // change to waves background - using theme?
-      } else if (this.state.effect == 0) {
-        // change to black background
-      } else if (this.state.effect == 4) {
-        // get new theme etc;
-        // change to black background
+      
+      // waves background
+      switch (this.state.effect) {
+        case 1:
+          this.setState((state, props) => ({
+            bg_color : "waves-bg";
+          }));
+          break;
+        case 3:
+          this.setState((state, props) => ({
+            bg_color : "black-bg";
+          }));
+          break;
+        case 4:
+          this.setState(this.newDefaultColor);
+          break;
       }
     }
 
     // unhover- change things back
     else {
-
-    }
-  }
-
-  pickNewColor(state, props) { const curr_color = state.color;
-    let new_color = Math.floor(Math.random() * 4);
-    while (new_color == curr_color) {
-      new_color = Math.floor(Math.random() * 4);
-    }
-    return ({
-      color : new_color
-    });
-  }
-
-  // callback for hoverable project items
-  handleBackgroundChange(bg, favicon) {
-    // special case
-    if (bg == "new") {
-      this.setState(this.pickNewColor);
-    } else {
-      this.setState((state, props) => ({
-        hover_bg : bg;
-        hover_favicon : favicon;
-      }));
+      switch (this.state.effect) {
+        case 4:
+          // /don't/ change back for the "new color" effect
+          break;
+        default:
+          this.setState((state, props) => ({
+            bg_color : BG_COLORS[this.color],
+            favicon : FAVICONS[this.color],
+          }));
+          break;
+      }
     }
   }
 
   render() {
-    const color_idx = this.state.color;
-
     const theme = this.themeContext(this.state.color, this.state.effect);
 
-    // default to yellow
-    let bg_color = "yellow-bg";
-    let favicon_path = yellow_favicon;
-    if (this.state.hover_bg) {
-      bg_color = this.state.hover_bg;
-      favicon_path = this.state.hover_favicon;
-    } else if (color_idx == 0) {
-      bg_color = "yellow-bg";
-      favicon_path = yellow_favicon;
-    } else if (color_idx == 1) {
-      bg_color = "purple-bg";
-      favicon_path = purple_favicon;
-    } else if (color_idx == 2) {
-      bg_color = "blue-bg";
-      favicon_path = blue_favicon;
-    } else if (color_idx == 3) {
-      bg_color = "green-bg";
-      favicon_path = green_favicon;
-    }
-    // console.log(favicon_path);
     return (
       <React.Fragment>
 	      <Helmet>
@@ -142,9 +147,8 @@ class Page extends React.Component {
               because google thinks it's not worth it to implement.
               but what else would you expect from google
           */}
-          <link rel="icon" type="image/gif" href={favicon_path} />
-          {/* <body className="waves-bg" /> */}
-          <body className={bg_color} />
+          <link rel="icon" type="image/gif" href={this.state.favicon} />
+          <body className={this.state.bg_color} />
 	      </Helmet>
 
         <ThemeContext.Provider value={theme}>
@@ -156,9 +160,9 @@ class Page extends React.Component {
                   <About/>
                 </Route>
                 <Route exact path="/">
-                  <ProjectList color_idx={color_idx}
+                  <ProjectList 
                                hover_effect_idx={this.state.effect}
-                               onHover={this.handleBackgroundChange} />
+                                />
                 </Route>
                 <Route path="/work">
                   <ProjectDocsWithRouter />
@@ -262,33 +266,27 @@ function renderProjectItem(project, idx: number) {
     switch (this.props.hover_effect_idx) {
       case 0:
         project_item = <BlackOutProjectItem
-                         key={idx} project={project}
-                         onHover={this.props.onHover} />;
+                         key={idx} project={project} />;
         break;
       case 1:
         project_item = <WavesBackgroundProjectItem 
-                         key={idx} project={project}
-                         onHover={this.props.onHover} />;
+                         key={idx} project={project} />;
         break;
       case 2:
 	    project_item = <InvisibleProjectItem
-      	                 key={idx} project={project}
-      	                 onHover={this.props.onHover} />;
+      	                 key={idx} project={project} />;
 	      break;
       case 3:
 	      project_item = <BlackBackgroundProjectItem
-      	                 key={idx} project={project}
-      	                 onHover={this.props.onHover} />;
+      	                 key={idx} project={project} />;
 	      break;
       case 4:
 	      project_item = <NewColorProjectItem
-      	                 key={idx} project={project}
-      	                 onHover={this.props.onHover} />;
+      	                 key={idx} project={project} />;
 	      break;
       default:
         project_item = <BlackOutProjectItem
-                         key={idx} project={project}
-                         onHover={this.props.onHover} />;
+                         key={idx} project={project} />;
         break;
 
     }
@@ -327,6 +325,26 @@ class ProjectList extends React.Component {
 
 }
 
+// determine link hover style from effect number
+function hoverStyle(effect) {
+      // 0: blackout link
+      // 1: waves
+      // 2: invisible link
+      // 3: black background
+      // 4: new color
+  console.log("effect = " + effect);
+  switch (effect) {
+    case 0:
+      return "blacked-out";
+      break;
+    case 2:
+      return "invisible";
+      break;
+  }
+
+  return "";
+}
+
 
 // my link :)
 class A extends React.Component {
@@ -360,14 +378,20 @@ class A extends React.Component {
 
   // link_color should be in a context
   // this.mouseEnter and mouseLeave should be too? pass it a onLinkHover global function? and onLinkUnHover?
+  // className={`project-title ${this.props.hovered_style}`}
  
   render() {
+    let style = this.context.link_color;
+    if (this.state.hovered) {
+      style = this.context.link_color + " " + this.context.hover_style;
+    }
+
     return (
-     <a className={this.context.link_color} href={this.props.href}
-                    onMouseEnter={this.mouseEnter}
-                    onMouseLeave={this.mouseLeave}>
-       {this.props.children}
-     </a>
+      <a className={style} href={this.props.href}
+                     onMouseEnter={this.mouseEnter}
+                     onMouseLeave={this.mouseLeave}>
+        {this.props.children}
+      </a>
     );
   }
 }
@@ -392,80 +416,65 @@ class ProjectListItem extends React.Component {
     this.setState((state, props) => ({
       hovered : true;
     }));
-    this.props.onHover(this.props.hovered_bg, 
-                       this.props.hovered_favicon);
+    this.context.onLinkHover(true);
   }
 
   mouseLeave(e) {
     this.setState((state, props) => ({
       hovered : false;
     }));
-    this.props.onHover("", "");
+    this.context.onLinkHover(false);
   }
 
-  render() {
-    const project = this.props.project;
-    const { hovered } = this.state;
 
-    if (!this.state.hovered) {
-        return (
-          <div 
-          className="project-item"
-        >
-          <Link to={"/work/" + project.id}>
-            <div> test div :) </div>
-          </Link>
-          <A href={project.link}>
-            <div
-                    className="project-title"
-                    onMouseEnter={this.mouseEnter}
-                    onMouseLeave={this.mouseLeave}>
-                    {project.title}
-                  </div>
-          </A>
-          <br></br>
-          <A href={project.link}>
-            <div 
-                    className="project-subtitle"
-                    onMouseEnter={this.mouseEnter}
-                    onMouseLeave={this.mouseLeave}
-                  >
-              <i>{project.subtitle}</i>
-                  </div>
-          </A>
-        </div>
-      );
-    // hovered case
-    } else {
-      return (
-        <div 
-          className="project-item"
-        >
-        <p></p>
-          <A href={project.link}>
-	          <div
-                    className={`project-title ${this.props.hovered_style}`}
-                    onMouseEnter={this.mouseEnter}
-                    onMouseLeave={this.mouseLeave}
-                  >
-                    {project.title}
-                  </div>
-          </A>
-          <br></br>
-          <A href={project.link}>
-	          <div 
-                    className={`project-subtitle ${this.props.hovered_style}`}
-                    onMouseEnter={this.mouseEnter}
-                    onMouseLeave={this.mouseLeave}
-                  >
-                    <i>{project.subtitle}</i>
-                  </div>
-          </A>
-        </div>
-      );
+   //        <Link to={"/work/" + project.id}>
+   //          <div> test div :) </div>
+   //        </Link>
+
+  render() {
+      // 0: blackout link
+      // 1: waves
+      // 2: invisible link
+      // 3: black background
+      // 4: new color
+    const project = this.props.project;
+    let title_style = "project-title";
+    let sub_style = "project-subtitle";
+    if (this.state.hovered) {
+      title_style = "project-title " + this.context.hover_style;
+      sub_style= "project-subtitle " + this.context.hover_style;
+    }
+    return (
+      <div 
+        className="project-item"
+      >
+        <a href={project.link}>
+	        <div
+                  className={title_style}
+                  onMouseEnter={this.mouseEnter}
+                  onMouseLeave={this.mouseLeave}
+                >
+                  {project.title}
+                </div>
+        </a>
+        <br></br>
+        <a href={project.link}>
+	        <div 
+                  className={sub_style}
+                  onMouseEnter={this.mouseEnter}
+                  onMouseLeave={this.mouseLeave}
+                >
+                  <i>{project.subtitle}</i>
+                </div>
+        </a>
+      </div>
+    );
     }
   }
 }
+
+// className={`project-title ${this.props.hovered_style}`}
+// className={`project-subtitle ${this.props.hovered_style}`}
 
 // censored
 class BlackOutProjectItem extends React.Component {
