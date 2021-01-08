@@ -30,7 +30,7 @@
       "title": "sou.ls",
       "subtitle": "a lonely social network",
       "date": "2020-08",
-      "documentation": false
+      "documentation": true
     },
     {
       "id": "july4",
@@ -45,7 +45,7 @@
       "title": "Godot Workshop (Babycastles Academy)",
       "subtitle": "intro to open-source game engine",
       "date": "2020-05",
-      "documentation": false
+      "documentation": true
     }
   ]
 }

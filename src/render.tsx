@@ -20,6 +20,9 @@ import waves_favicon from "./../assets/waves-icon.gif";
 
 import project_metas from "./../assets/project_metas.json"
 
+import { ProjectDocsWithRouter } from "./documentation";
+import { ThemeContext} from "./theme";
+
 
 // colors
 const BG_COLORS = ["yellow-bg", "purple-bg", 
@@ -31,7 +34,6 @@ const FAVICONS = [yellow_favicon, purple_favicon,
 const LINK_COLORS = ["yellow-link", "purple-link", 
                      "blue-link", "green-link"];
 
-const ThemeContext = React.createContext({});
 
 
 // this is called on a tick
@@ -311,50 +313,6 @@ class ProjectList extends React.Component {
 
 
 
-// my link :)
-class A extends React.Component {
-  static contextType = ThemeContext;
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      hovered : false;
-    };
-
-    this.mouseEnter = this.mouseEnter.bind(this);
-    this.mouseLeave = this.mouseLeave.bind(this);
-  }
-
-  mouseEnter(e) {
-    this.setState((state, props) => ({
-      hovered : true;
-    }));
-    this.context.onLinkHover(true);
-  }
-
-  mouseLeave(e) {
-    this.setState((state, props) => ({
-      hovered : false;
-    }));
-    this.context.onLinkHover(false);
-  }
- 
-  render() {
-    let style = this.context.link_color;
-    if (this.state.hovered) {
-      style = this.context.link_color + " " + this.context.hover_style;
-    }
-
-    return (
-      <a className={style} href={this.props.href}
-                     onMouseEnter={this.mouseEnter}
-                     onMouseLeave={this.mouseLeave}>
-        {this.props.children}
-      </a>
-    );
-  }
-}
-
 // <A className="class" href="https://some.link" />.
 
 // the clickable project name/subtitle link
@@ -386,9 +344,6 @@ class ProjectListItem extends React.Component {
   }
 
 
-   //        <Link to={"/work/" + project.id}>
-   //          <div> test div :) </div>
-   //        </Link>
 
   render() {
       // 0: blackout link
@@ -403,31 +358,67 @@ class ProjectListItem extends React.Component {
       title_style = "project-title " + this.context.hover_style;
       sub_style= "project-subtitle " + this.context.hover_style;
     }
-    return (
-      <div 
-        className="project-item"
-      >
-        <a href={project.link}>
-	        <div
-                  className={title_style}
-                  onMouseEnter={this.mouseEnter}
-                  onMouseLeave={this.mouseLeave}
-                >
-                  {project.title}
-                </div>
-        </a>
-        <br></br>
-        <a href={project.link}>
-	        <div 
-                  className={sub_style}
-                  onMouseEnter={this.mouseEnter}
-                  onMouseLeave={this.mouseLeave}
-                >
-                  <i>{project.subtitle}</i>
-                </div>
-        </a>
-      </div>
-    );
+
+   //        <Link to={"/work/" + project.id}>
+   //          <div> test div :) </div>
+   //        </Link>
+
+    if (project.documentation) {
+      return (
+        <div 
+          className="project-item"
+        >
+          <Link to={"/work/" + project.id}>
+	          <div
+                    className={title_style}
+                    onMouseEnter={this.mouseEnter}
+                    onMouseLeave={this.mouseLeave}
+                  >
+                    {project.title}
+            </div>
+          </Link>
+          <br></br>
+          <Link to={"/work/" + project.id}>
+	          <div 
+                    className={sub_style}
+                    onMouseEnter={this.mouseEnter}
+                    onMouseLeave={this.mouseLeave}
+                  >
+                    <i>{project.subtitle}</i>
+            </div>
+          </Link>
+        </div>
+      );
+
+    } else {
+
+    }
+
+      return (
+        <div 
+          className="project-item"
+        >
+          <a href={project.link}>
+            <div
+                    className={title_style}
+                    onMouseEnter={this.mouseEnter}
+                    onMouseLeave={this.mouseLeave}
+                  >
+                    {project.title}
+                  </div>
+          </a>
+          <br></br>
+          <a href={project.link}>
+            <div 
+                    className={sub_style}
+                    onMouseEnter={this.mouseEnter}
+                    onMouseLeave={this.mouseLeave}
+                  >
+                    <i>{project.subtitle}</i>
+                  </div>
+          </a>
+        </div>
+      );
     }
   }
 }
@@ -435,38 +426,5 @@ class ProjectListItem extends React.Component {
 // className={`project-title ${this.props.hovered_style}`}
 // className={`project-subtitle ${this.props.hovered_style}`}
 
-// pages for project documentation
-class ProjectDocumentations extends React.Component {
-  constructor(props) {
-    super(props);
-    
-  }
-
-  render() {
-    return (
-      <Switch>
-        <Route path={`${this.props.match.path}/:project_id`}
-               component={ProjectDocumentation} >
-        </Route>
-        <Route>
-        </Route>
-      </Switch>
-    );
-  );}
-}
-// https://reactrouter.com/web/api/withRouter
-const ProjectDocsWithRouter = withRouter(ProjectDocumentations);
-
-class ProjectDocumentation extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.id = this.props.match.params.project_id;
-  }
-
-  render() {
-    return <div> this is documetation for a project {this.id} </div>
-  );}
-}
 
 export { render };
