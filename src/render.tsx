@@ -26,11 +26,6 @@ const LINK_COLORS = ["yellow-link", "purple-link",
 
 const ThemeContext = React.createContext({});
 
-function themeContext(color, effect) {
-  return({
-    link_color : LINK_COLORS[color]
-  });
-}
 
 // this is called on a tick
 function render() {
@@ -45,6 +40,7 @@ class Page extends React.Component {
     super(props);
 
     this.handleBackgroundChange = this.handleBackgroundChange.bind(this);
+    this.onThemeHover = this.onThemeHover.bind(this);
 
     this.state = {
       // pick a random color for various page stylings
@@ -57,9 +53,40 @@ class Page extends React.Component {
       waves_bg: false
     };
   }
+  
+  themeContext(color, effect) {
+    return({
+      link_color : LINK_COLORS[color]
+      onLinkHover : this.onThemeHover;
+    });
+  }
 
-  pickNewColor(state, props) {
-    const curr_color = state.color;
+  // callback for hoverable project items
+  onThemeHover(hover) {
+    console.log("changing theme, hover=" + hover);
+    if (hover) {
+      // 0: blackout link
+      // 1: waves
+      // 2: invisible link
+      // 3: black background
+      // 4: new color
+      if (this.state.effect == 1) {
+        // change to waves background - using theme?
+      } else if (this.state.effect == 0) {
+        // change to black background
+      } else if (this.state.effect == 4) {
+        // get new theme etc;
+        // change to black background
+      }
+    }
+
+    // unhover- change things back
+    else {
+
+    }
+  }
+
+  pickNewColor(state, props) { const curr_color = state.color;
     let new_color = Math.floor(Math.random() * 4);
     while (new_color == curr_color) {
       new_color = Math.floor(Math.random() * 4);
@@ -85,7 +112,7 @@ class Page extends React.Component {
   render() {
     const color_idx = this.state.color;
 
-    const theme = themeContext(this.state.color, this.state.effect);
+    const theme = this.themeContext(this.state.color, this.state.effect);
 
     // default to yellow
     let bg_color = "yellow-bg";
@@ -305,12 +332,40 @@ class ProjectList extends React.Component {
 class A extends React.Component {
   static contextType = ThemeContext;
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      hovered : false;
+    };
+
+    this.mouseEnter = this.mouseEnter.bind(this);
+    this.mouseLeave = this.mouseLeave.bind(this);
+  }
+
+  mouseEnter(e) {
+    this.setState((state, props) => ({
+      hovered : true;
+    }));
+    this.context.onLinkHover(true);
+  }
+
+
+  mouseLeave(e) {
+    this.setState((state, props) => ({
+      hovered : false;
+    }));
+    this.context.onLinkHover(false);
+  }
+
+
   // link_color should be in a context
   // this.mouseEnter and mouseLeave should be too? pass it a onLinkHover global function? and onLinkUnHover?
-
+ 
   render() {
     return (
-     <a className={this.context.link_color} href={this.props.href}>
+     <a className={this.context.link_color} href={this.props.href}
+                    onMouseEnter={this.mouseEnter}
+                    onMouseLeave={this.mouseLeave}>
        {this.props.children}
      </a>
     );
@@ -364,8 +419,7 @@ class ProjectListItem extends React.Component {
             <div
                     className="project-title"
                     onMouseEnter={this.mouseEnter}
-                    onMouseLeave={this.mouseLeave}
-                  >
+                    onMouseLeave={this.mouseLeave}>
                     {project.title}
                   </div>
           </A>
@@ -376,7 +430,7 @@ class ProjectListItem extends React.Component {
                     onMouseEnter={this.mouseEnter}
                     onMouseLeave={this.mouseLeave}
                   >
-                    <i>{project.subtitle}</i>
+              <i>{project.subtitle}</i>
                   </div>
           </A>
         </div>
