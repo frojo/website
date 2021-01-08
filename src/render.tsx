@@ -177,9 +177,7 @@ class Page extends React.Component {
                   <About/>
                 </Route>
                 <Route exact path="/">
-                  <ProjectList 
-                               hover_effect_idx={this.state.effect}
-                                />
+                  <ProjectList />
                 </Route>
                 <Route path="/work">
                   <ProjectDocsWithRouter />
@@ -275,8 +273,6 @@ class About extends React.Component {
     );}
 }
 
-// todo: make a ProjectLayout type like how max does?
-// https://github.com/MaxBittker/walky/blob/master/src/render.tsx
 function renderProjectItem(project, idx: number) {
   return (
     <ProjectListItem key={idx} project={project} />
@@ -336,18 +332,12 @@ class A extends React.Component {
     this.context.onLinkHover(true);
   }
 
-
   mouseLeave(e) {
     this.setState((state, props) => ({
       hovered : false;
     }));
     this.context.onLinkHover(false);
   }
-
-
-  // link_color should be in a context
-  // this.mouseEnter and mouseLeave should be too? pass it a onLinkHover global function? and onLinkUnHover?
-  // className={`project-title ${this.props.hovered_style}`}
  
   render() {
     let style = this.context.link_color;
