@@ -2,7 +2,7 @@ import * as React from "react";
 import ReactDOM = require("react-dom");
 import { BrowserRouter as Router, 
          Switch, Route, Link, 
-         withRouter 
+         withRouter, useRouteMatch
        } from 'react-router-dom';
 
 /* we love libraries */
@@ -20,11 +20,24 @@ import waves_favicon from "./../assets/waves-icon.gif";
 import project_metas from "./../assets/project_metas.json"
 
 
+// themes 
+const LINK_COLORS = ["yellow-link", "purple-link", 
+                     "blue-link", "green-link"];
+
+const ThemeContext = React.createContext({});
+
+function themeContext(color, effect) {
+  return({
+    link_color : LINK_COLORS[color]
+  });
+}
+
 // this is called on a tick
 function render() {
   const element = <Page />;
   ReactDOM.render(element, document.getElementById("root"));
 }
+
 
 // the header at the top of the page throughout the website
 class Page extends React.Component {
@@ -35,10 +48,10 @@ class Page extends React.Component {
 
     this.state = {
       // pick a random color for various page stylings
-      rand_color : Math.floor(Math.random() * 4),
+      color : Math.floor(Math.random() * 4),
 
       // pick a random hover effect
-      rand_effect : Math.floor(Math.random() * 5),
+      effect : Math.floor(Math.random() * 5),
     
       // are we showing the waves background?
       waves_bg: false
@@ -46,13 +59,13 @@ class Page extends React.Component {
   }
 
   pickNewColor(state, props) {
-    const curr_color = state.rand_color;
+    const curr_color = state.color;
     let new_color = Math.floor(Math.random() * 4);
     while (new_color == curr_color) {
       new_color = Math.floor(Math.random() * 4);
     }
     return ({
-      rand_color : new_color
+      color : new_color
     });
   }
 
@@ -70,7 +83,9 @@ class Page extends React.Component {
   }
 
   render() {
-    const color_idx = this.state.rand_color;
+    const color_idx = this.state.color;
+
+    const theme = themeContext(this.state.color, this.state.effect);
 
     // default to yellow
     let bg_color = "yellow-bg";
@@ -105,21 +120,26 @@ class Page extends React.Component {
           <body className={bg_color} />
 	      </Helmet>
 
-        <div id="page">
-          <Router>
-            <HeaderWithRouter/>
-            <Switch>
-              <Route exact path="/about">
-                <About/>
-              </Route>
-              <Route exact path="/">
-                <ProjectList color_idx={color_idx}
-                             hover_effect_idx={this.state.rand_effect}
-                             onHover={this.handleBackgroundChange} />
-              </Route>
-            </Switch>
-          </Router>
-        </div>
+        <ThemeContext.Provider value={theme}>
+          <div id="page">
+            <Router>
+              <HeaderWithRouter/>
+              <Switch>
+                <Route exact path="/about">
+                  <About/>
+                </Route>
+                <Route exact path="/">
+                  <ProjectList color_idx={color_idx}
+                               hover_effect_idx={this.state.effect}
+                               onHover={this.handleBackgroundChange} />
+                </Route>
+                <Route path="/work">
+                  <ProjectDocsWithRouter />
+                </Route>
+              </Switch>
+            </Router>
+          </div>
+        </ThemeContext.Provider>
       </React.Fragment>
     );}
 }
@@ -216,37 +236,31 @@ function renderProjectItem(project, idx: number) {
       case 0:
         project_item = <BlackOutProjectItem
                          key={idx} project={project}
-                         color_idx={this.props.color_idx} 
                          onHover={this.props.onHover} />;
         break;
       case 1:
         project_item = <WavesBackgroundProjectItem 
                          key={idx} project={project}
-                         color_idx={this.props.color_idx} 
                          onHover={this.props.onHover} />;
         break;
       case 2:
 	    project_item = <InvisibleProjectItem
       	                 key={idx} project={project}
-      	                 color_idx={this.props.color_idx} 
       	                 onHover={this.props.onHover} />;
 	      break;
       case 3:
 	      project_item = <BlackBackgroundProjectItem
       	                 key={idx} project={project}
-      	                 color_idx={this.props.color_idx} 
       	                 onHover={this.props.onHover} />;
 	      break;
       case 4:
 	      project_item = <NewColorProjectItem
       	                 key={idx} project={project}
-      	                 color_idx={this.props.color_idx} 
       	                 onHover={this.props.onHover} />;
 	      break;
       default:
         project_item = <BlackOutProjectItem
                          key={idx} project={project}
-                         color_idx={this.props.color_idx} 
                          onHover={this.props.onHover} />;
         break;
 
@@ -258,21 +272,57 @@ function renderProjectItem(project, idx: number) {
 
 // the clickable project name/subtitle links
 class ProjectList extends React.Component {
-  render() {
-    // maybe move this stuff into a constructor
-    const projects = project_metas.projects;
+  constructor(props) {
+    super(props);
+    this.ordered_projects = this.sortReverseChrono(
+                              project_metas.projects);
+  }
 
+  // THE TITAN CHRONOS
+  sortReverseChrono(projects) {
+    const sorted = projects.sort(function(a, b) {
+      if (a.date > b.date) {
+        return -1;
+      } else {
+        return 1;
+      }
+    });
+    return sorted
+  }
+
+  render() {
     return (
     <div id="project-list">
-      {projects.map(renderProjectItem, this)}
+      {this.ordered_projects.map(renderProjectItem, this)}
     </div>
       
     );}
 
 }
 
+
+// my link :)
+class A extends React.Component {
+  static contextType = ThemeContext;
+
+  // link_color should be in a context
+  // this.mouseEnter and mouseLeave should be too? pass it a onLinkHover global function? and onLinkUnHover?
+
+  render() {
+    return (
+     <a className={this.context.link_color} href={this.props.href}>
+       {this.props.children}
+     </a>
+    );
+  }
+}
+
+// <A className="class" href="https://some.link" />.
+
 // the clickable project name/subtitle link
 class ProjectListItem extends React.Component {
+  static contextType = ThemeContext;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -301,27 +351,16 @@ class ProjectListItem extends React.Component {
   render() {
     const project = this.props.project;
     const { hovered } = this.state;
-    const color_idx = this.props.color_idx;
-
-    // default to yellow
-    let link_color = "yellow-link";
-    if (color_idx == 0) {
-      link_color = "yellow-link";
-    } else if (color_idx == 1) {
-      link_color = "purple-link";
-    } else if (color_idx == 2) {
-      link_color = "blue-link";
-    } else if (color_idx == 3) {
-      link_color = "green-link";
-    }
-
 
     if (!this.state.hovered) {
         return (
           <div 
           className="project-item"
         >
-          <a className={link_color} href={project.link}>
+          <Link to={"/work/" + project.id}>
+            <div> test div :) </div>
+          </Link>
+          <A href={project.link}>
             <div
                     className="project-title"
                     onMouseEnter={this.mouseEnter}
@@ -329,9 +368,9 @@ class ProjectListItem extends React.Component {
                   >
                     {project.title}
                   </div>
-          </a>
+          </A>
           <br></br>
-          <a className={link_color} href={project.link}>
+          <A href={project.link}>
             <div 
                     className="project-subtitle"
                     onMouseEnter={this.mouseEnter}
@@ -339,7 +378,7 @@ class ProjectListItem extends React.Component {
                   >
                     <i>{project.subtitle}</i>
                   </div>
-          </a>
+          </A>
         </div>
       );
     // hovered case
@@ -349,7 +388,7 @@ class ProjectListItem extends React.Component {
           className="project-item"
         >
         <p></p>
-	        <a className={link_color} href={project.link}>
+          <A href={project.link}>
 	          <div
                     className={`project-title ${this.props.hovered_style}`}
                     onMouseEnter={this.mouseEnter}
@@ -357,9 +396,9 @@ class ProjectListItem extends React.Component {
                   >
                     {project.title}
                   </div>
-	        </a>
+          </A>
           <br></br>
-	        <a className={link_color} href={project.link}>
+          <A href={project.link}>
 	          <div 
                     className={`project-subtitle ${this.props.hovered_style}`}
                     onMouseEnter={this.mouseEnter}
@@ -367,7 +406,7 @@ class ProjectListItem extends React.Component {
                   >
                     <i>{project.subtitle}</i>
                   </div>
-	        </a>
+          </A>
         </div>
       );
     }
@@ -429,6 +468,40 @@ class NewColorProjectItem extends React.Component {
     return <ProjectListItem {...this.props}
 			    hovered_style=""
           hovered_bg="new" hovered_favicon="" />;
+  );}
+}
+
+// pages for project documentation
+class ProjectDocumentations extends React.Component {
+  constructor(props) {
+    super(props);
+    
+  }
+
+  render() {
+    return (
+      <Switch>
+        <Route path={`${this.props.match.path}/:project_id`}
+               component={ProjectDocumentation} >
+        </Route>
+        <Route>
+        </Route>
+      </Switch>
+    );
+  );}
+}
+// https://reactrouter.com/web/api/withRouter
+const ProjectDocsWithRouter = withRouter(ProjectDocumentations);
+
+class ProjectDocumentation extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.id = this.props.match.params.project_id;
+  }
+
+  render() {
+    return <div> this is documetation for a project {this.id} </div>
   );}
 }
 

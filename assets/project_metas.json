@@ -2,50 +2,50 @@
 { 
   "projects" : [
     {
+      "id": "campsim",
       "title": "camping simulator 2020",
       "subtitle": "a conversation on August 28",
-      "link": "https://frojo.itch.io/camping"
+      "link": "https://frojo.itch.io/camping",
+      "date": "2020-09",
+      "documentation": false
     },
     {
+      "id": "bloomfield",
       "title": "a summer afternoon in bloomfield",
       "subtitle": "a love letter to the neighborhood",
-      "link": "https://frojo.itch.io/a-summer-afternoon-in-bloomfield"
+      "link": "https://frojo.itch.io/a-summer-afternoon-in-bloomfield",
+      "date": "2019-10",
+      "documentation": false
     },
     {
+      "id": "loops",
       "title": "loops",
-      "subtitle": "a meditation on rituals",
-      "link": "https://frojo.itch.io/loops"
+      "subtitle": "a rumination on habit",
+      "link": "https://frojo.itch.io/loops",
+      "date": "2020-06",
+      "documentation": false
     },
     {
+      "id": "souls",
       "title": "sou.ls",
-      "subtitle": "a lonely social network"
+      "subtitle": "a lonely social network",
+      "date": "2020-08",
+      "documentation": false
     },
     {
-      "title": "another project",
-      "subtitle": "where i would put a project IF I HAD ONE",
-      "link": "https://frojo.itch.io/loops"
+      "id": "july4",
+      "title": "july4",
+      "subtitle": "a moment on a rooftop",
+      "link": "https://frojo.itch.io/july4",
+      "date": "2020-07",
+      "documentation": false
     },
     {
-      "title": "lorem project ipsum",
-      "subtitle": "john cage says the idea is more important anyay"
-    },
-    {
-      "title": "another project",
-      "subtitle": "where i would put a project IF I HAD ONE",
-      "link": "https://frojo.itch.io/loops"
-    },
-    {
-      "title": "lorem project ipsum",
-      "subtitle": "john cage says the idea is more important anyay"
-    },
-    {
-      "title": "another project",
-      "subtitle": "where i would put a project if i had one",
-      "link": "https://frojo.itch.io/loops"
-    },
-    {
-      "title": "lorem project ipsum",
-      "subtitle": "john cage says the idea is more important anyay"
+      "id": "godot-workshop",
+      "title": "Godot Workshop (Babycastles Academy)",
+      "subtitle": "intro to open-source game engine",
+      "date": "2020-05",
+      "documentation": false
     }
   ]
 }
