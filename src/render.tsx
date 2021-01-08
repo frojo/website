@@ -68,7 +68,7 @@ class Page extends React.Component {
   themeContext(color, effect) {
     return({
       link_color : LINK_COLORS[color],
-      hover_style : hoverStyle(effect),
+      hover_style : this.hoverStyle(effect),
       onLinkHover : this.onThemeHover;
     });
   }
@@ -91,7 +91,6 @@ class Page extends React.Component {
       favicon : FAVICONS[new_color],
     });
   }
-
 
   // callback for hoverable project items
   onThemeHover(hover) {
@@ -134,6 +133,24 @@ class Page extends React.Component {
           break;
       }
     }
+  }
+
+  // determine link hover style from effect number
+  hoverStyle(effect) {
+        // 0: blackout link
+        // 1: waves
+        // 2: invisible link
+        // 3: black background
+        // 4: new color
+    switch (effect) {
+      case 0:
+        return "blacked-out";
+        break;
+      case 2:
+        return "invisible";
+        break;
+    }
+    return "";
   }
 
   render() {
@@ -261,38 +278,9 @@ class About extends React.Component {
 // todo: make a ProjectLayout type like how max does?
 // https://github.com/MaxBittker/walky/blob/master/src/render.tsx
 function renderProjectItem(project, idx: number) {
-    let project_item;
-
-    switch (this.props.hover_effect_idx) {
-      case 0:
-        project_item = <BlackOutProjectItem
-                         key={idx} project={project} />;
-        break;
-      case 1:
-        project_item = <WavesBackgroundProjectItem 
-                         key={idx} project={project} />;
-        break;
-      case 2:
-	    project_item = <InvisibleProjectItem
-      	                 key={idx} project={project} />;
-	      break;
-      case 3:
-	      project_item = <BlackBackgroundProjectItem
-      	                 key={idx} project={project} />;
-	      break;
-      case 4:
-	      project_item = <NewColorProjectItem
-      	                 key={idx} project={project} />;
-	      break;
-      default:
-        project_item = <BlackOutProjectItem
-                         key={idx} project={project} />;
-        break;
-
-    }
-
-    return project_item;
-
+  return (
+    <ProjectListItem key={idx} project={project} />
+  );
 }
 
 // the clickable project name/subtitle links
@@ -325,25 +313,6 @@ class ProjectList extends React.Component {
 
 }
 
-// determine link hover style from effect number
-function hoverStyle(effect) {
-      // 0: blackout link
-      // 1: waves
-      // 2: invisible link
-      // 3: black background
-      // 4: new color
-  console.log("effect = " + effect);
-  switch (effect) {
-    case 0:
-      return "blacked-out";
-      break;
-    case 2:
-      return "invisible";
-      break;
-  }
-
-  return "";
-}
 
 
 // my link :)
@@ -475,64 +444,6 @@ class ProjectListItem extends React.Component {
 
 // className={`project-title ${this.props.hovered_style}`}
 // className={`project-subtitle ${this.props.hovered_style}`}
-
-// censored
-class BlackOutProjectItem extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    return <ProjectListItem {...this.props}
-			    hovered_style="blacked-out" />;
-  );}
-}
-
-class WavesBackgroundProjectItem extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
-    return <ProjectListItem {...this.props}
-			    hovered_style=""
-          hovered_bg="waves-bg" hovered_favicon={waves_favicon} />;
-  );}
-}
-
-class InvisibleProjectItem extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    return <ProjectListItem {...this.props}
-			    hovered_style="invisible" />;
-  );}
-}
-
-class BlackBackgroundProjectItem extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    return <ProjectListItem {...this.props}
-			    hovered_style=""
-          hovered_bg="black-bg" hovered_favicon={black_favicon} />;
-  );}
-}
-
-class NewColorProjectItem extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    return <ProjectListItem {...this.props}
-			    hovered_style=""
-          hovered_bg="new" hovered_favicon="" />;
-  );}
-}
 
 // pages for project documentation
 class ProjectDocumentations extends React.Component {
