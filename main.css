@@ -4,14 +4,22 @@ body {
 
   width: 100vw;
   height: 100vh;
-  user-select: none;
   margin: 0px;
+}
+
+::selection {
+  background: rgba(0, 0, 0, .99);
+  color: black;
 }
 
 /* get rid of default link styling */
 a {
   color: inherit;
   text-decoration: inherit;
+}
+
+img {
+  width: 100%;
 }
 
 /* off-white backgrounds colors */
@@ -49,9 +57,11 @@ a {
 }
 
 
+/* enable this if i want to do weird shit?
 * {
   user-select: none !important;
 }
+*/
 
 @media screen and (max-width: 600px) {
 }
@@ -62,6 +72,8 @@ a {
   padding-right: 90px;
   padding-top: 80px;
   padding-bottom: 80px;
+
+  max-width: 900px;
 }
 
 

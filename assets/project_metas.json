@@ -46,6 +46,42 @@
       "subtitle": "intro to open-source game engine",
       "date": "2020-05",
       "documentation": true
+    },
+    {
+      "id": "word-garden",
+      "title": "word garden",
+      "subtitle": "a garden of words",
+      "date": "2020-03",
+      "documentation": true
+    },
+    {
+      "id": "pico8-pcd2020",
+      "title": "Intro. to PICO-8 (Processing Community Day)",
+      "subtitle": "the joy of working with limitations",
+      "date": "2020-02",
+      "documentation": true
+    },
+    {
+      "id": "pride-prejudice-pussy",
+      "title": "Pride and Prejudice and Pussy",
+      "subtitle": "surrealist erotica",
+      "date": "2020-03",
+      "documentation": true
+    },
+    {
+      "id": "what-do-you-wish",
+      "title": "what do you wish you could say?",
+      "subtitle": "a respite",
+      "date": "2019-12",
+      "documentation": true
+    },
+    {
+      "id": "sail",
+      "title": "sail.p8",
+      "subtitle": "two-player sailing game in pico8",
+      "link": "https://www.lexaloffle.com/bbs/?tid=33712",
+      "date": "2019-03",
+      "documentation": false
     }
   ]
 }

@@ -31,9 +31,9 @@ class A extends React.Component {
   }
 
   render() {
-    let style = this.context.link_color;
+    let style = "underline-dashed " + this.context.link_color;
     if (this.state.hovered) {
-      style = this.context.link_color + " " + this.context.hover_style;
+      style = style + " " + this.context.hover_style;
     }
     return (
       <a className={style} href={this.props.href}
