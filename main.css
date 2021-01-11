@@ -12,15 +12,90 @@ body {
   color: black;
 }
 
-/* get rid of default link styling */
+/* get rid of default html link styling*/
 a {
   color: inherit;
   text-decoration: inherit;
 }
 
+
 img {
   width: 100%;
 }
+
+
+/* enable this if i want to do weird shit?
+* {
+  user-select: none !important;
+}
+*/
+
+@media screen and (max-width: 600px) {
+}
+
+#page {
+  /* nice big margins give you room to breathe*/
+  padding-left: 90px;
+  padding-right: 90px;
+  padding-top: 80px;
+  padding-bottom: 80px;
+
+  /* not too wide */
+  max-width: 900px;
+}
+
+
+/* header nav bar*/
+
+#header {
+  font-size: 32px;
+  margin-bottom: 48px;
+}
+
+#name {
+  display: inline;
+}
+
+
+/* container for menu items (work, about blog) */
+#header-menu-wrapper {
+  float: right;
+}
+
+.header-menu-item {
+  display: inline;
+  margin-left: 14px;
+  margin-right: 14px;
+}
+
+.header-menu-item:hover {
+  text-decoration: underline;
+  text-decoration-style: dashed;
+}
+
+/* project list page */
+.project-item {
+  margin-top: 32px;
+  margin-bottom: 32px;
+}
+
+.project-title {
+  font-size: 28px;
+  display: inline;
+}
+
+.project-subtitle {
+  font-size: 16px;
+  margin-left:32px;
+  display: inline;
+}
+
+.documentation a {
+  text-decoration: underline;
+  text-decoration-style: dashed;
+}
+
+/* classes for the weird interactive theming */
 
 /* off-white backgrounds colors */
 .yellow-bg {
@@ -54,84 +129,6 @@ img {
 
 .green-link:visited {
   color: #6a9f70;
-}
-
-
-/* enable this if i want to do weird shit?
-* {
-  user-select: none !important;
-}
-*/
-
-@media screen and (max-width: 600px) {
-}
-
-
-#page {
-  padding-left: 90px;
-  padding-right: 90px;
-  padding-top: 80px;
-  padding-bottom: 80px;
-
-  max-width: 900px;
-}
-
-
-
-#header {
-  font-size: 32px;
-  margin-bottom: 48px;
-
-  /* nice big aesthetic calming deadzones */
-
-  /* dont let the menu items go toooo far right on huge screens */
-  max-width: 900px;
-}
-
-#name {
-  display: inline;
-}
-
-
-/* container for menu items (work, about blog) */
-#header-menu-wrapper {
-  float: right;
-}
-
-.header-menu-item {
-  display: inline;
-  margin-left: 14px;
-  margin-right: 14px;
-}
-
-.header-menu-item:hover {
-  text-decoration: underline;
-  text-decoration-style: dashed;
-}
-
-/* to indicate what page we're on */
-.underline-dashed {
-  text-decoration: underline;
-  text-decoration-style: dashed;
-}
-
-#project-list {
-}
-
-.project-item {
-  margin-top: 32px;
-  margin-bottom: 32px;
-}
-
-.project-title {
-  font-size: 28px;
-  display: inline;
-}
-
-.project-subtitle {
-  font-size: 16px;
-  margin-left:32px;
-  display: inline;
 }
 
 /* hover effects */

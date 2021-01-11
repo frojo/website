@@ -22,13 +22,15 @@ class ProjectDocumentations extends React.Component {
 
   render() {
     return (
-      <Switch>
-        <Route path={`${this.props.match.path}/:project_id`}
-               component={ProjectDocumentation} >
-        </Route>
-        <Route>
-        </Route>
-      </Switch>
+      <div className="documentation">
+	<Switch>
+      	  <Route path={`${this.props.match.path}/:project_id`}
+      	         component={ProjectDocumentation} >
+      	  </Route>
+      	  <Route>
+      	  </Route>
+      	</Switch>
+      </div>
     );
   );}
 }
@@ -77,11 +79,9 @@ class SoulsDoc extends React.Component {
     <React.Fragment>
     <h1> sou.ls </h1>
     <p> in March 2020, when the pandemic first hit, I (like most) felt pretty lonely and instead of working through it in a healthy way, I made <A href="https://sou.ls">sou.ls</A></p>
-    <p>At around the same time, I started spending a lot of time on Instagram. Social media always seemed scary and not worth it, but suddenly that's how I was maintaining relationships with my friends. I knew that, big-picture, me and my friendships were <A href="http://wagesforfacebook.com/">being exploited</A>. But still, it's nice to see a friend napping with their cat, or an on-point meme about COVID, or taking a huge rip from a bong.</p>
-      PIC OF DM TAB
-      <p>I mostly spent time in the messages tab, though I didn't really really DM people much... i found myself looking at the profile pics of my friends, and noticing when last they'd been "active". When it said "Active Now" next to their portrait with the little green dot, I'd imagine them lying belly-down on their bed (my personal mode of consmumption), or maybe under a tree. If someone is in a different time zone, it could be noon where i am, and they could be scrolling through their phone at sunset. i wasnt often in the mood to DM anyone, but just seeing their virtual presence there was a source of comfort. It was thrilling proof that they still existed, that i still existed.</p>
-      PANOPTICON MUTUAL SURVEILLANCE PIC
-    <p>at the same time, it's troubling that i have this way of monitoring the activity of my friends, and with such granularity. not only do i know if someone is currently online, i can tell if they were online just 2 minutes ago, or if they haven't been online since yesterday. like a lot of Instagram's design, this normalized mutual mass surveillance doesn't seem healthy for anybody involved.</p>
+    <p>At around the same time, I started spending a lot of time on Instagram. Social media always seemed scary and not worth it, but suddenly that's how I was maintaining relationships with my friends. I knew that, big-picture, me and my friendships were <A href="http://wagesforfacebook.com/">being exploited</A>. But still, it's nice to see a friend napping with their cat, or taking a huge rip from a bong, or sharing a good COVID meme.</p>
+      <p>I mostly spent time in the messages tab, though I didn't really DM people much... i found myself looking at the profile pics of my friends, and noticing when last they'd been "active". When it said "Active Now" next to their portrait with the little green dot, I'd imagine them laying belly-down on their bed, or maybe under a tree. i'd wonder what the weather was like where they were. was the sun still up? i wasnt often in the mood to DM anyone, but just seeing their virtual presence there was a source of comfort.</p>
+    <p>at the same time, it's troubling that i have this way of monitoring the activity of my friends, and with such granularity. not only do i know when someone is currently online, i can tell if they were online just 2 minutes ago, or if they haven't been online since yesterday. like a lot of Instagram's design, this normalized mutual mass surveillance doesn't seem healthy for anybody involved.</p>
     </React.Fragment>
   );}
 }

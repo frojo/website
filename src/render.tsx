@@ -4,6 +4,7 @@ import { BrowserRouter as Router,
          Switch, Route, Link, 
          withRouter, useRouteMatch
        } from 'react-router-dom';
+import { browserHistory } from 'react-router';
 
 /* we love libraries */
 import { Helmet } from "react-helmet";
@@ -21,7 +22,7 @@ import waves_favicon from "./../assets/waves-icon.gif";
 import project_metas from "./../assets/project_metas.json"
 
 import { ProjectDocsWithRouter } from "./documentation";
-import { ThemeContext} from "./theme";
+import { ThemeContext, ThemeLink } from "./theme";
 
 
 // colors
@@ -66,6 +67,7 @@ class Page extends React.Component {
       waves_bg: false
     };
   }
+
   
   themeContext(color, effect) {
     return({
@@ -120,7 +122,6 @@ class Page extends React.Component {
           break;
       }
     }
-
     // unhover- change things back
     else {
       switch (this.state.effect) {
@@ -173,18 +174,8 @@ class Page extends React.Component {
         <ThemeContext.Provider value={theme}>
           <div id="page">
             <Router>
-              <HeaderWithRouter/>
-              <Switch>
-                <Route exact path="/about">
-                  <About/>
-                </Route>
-                <Route exact path="/">
-                  <ProjectList />
-                </Route>
-                <Route path="/work">
-                  <ProjectDocsWithRouter />
-                </Route>
-              </Switch>
+              <HeaderWithRouter />
+	      <BodyWithRouter />
             </Router>
           </div>
         </ThemeContext.Provider>
@@ -275,6 +266,38 @@ class About extends React.Component {
     );}
 }
 
+class Body extends React.Component {
+  static contextType = ThemeContext;
+
+  componentDidMount() {
+    // new page (like when someone clicks on in-website link)
+    this.historyChange = this.props.history.listen( location =>  {
+	this.context.onLinkHover(false);
+    });
+
+  }
+
+  componentWillUnmount() {
+    this.historyChange();
+  }
+
+  render() {
+    return (
+      <Switch>
+        <Route exact path="/about">
+          <About/>
+        </Route>
+        <Route exact path="/">
+          <ProjectList />
+        </Route>
+        <Route path="/work">
+          <ProjectDocsWithRouter />
+        </Route>
+      </Switch>
+    );}
+}
+const BodyWithRouter = withRouter(Body);
+
 function renderProjectItem(project, idx: number) {
   return (
     <ProjectListItem key={idx} project={project} />
@@ -346,85 +369,59 @@ class ProjectListItem extends React.Component {
 
 
   render() {
-      // 0: blackout link
-      // 1: waves
-      // 2: invisible link
-      // 3: black background
-      // 4: new color
     const project = this.props.project;
-    let title_style = "project-title";
-    let sub_style = "project-subtitle";
-    if (this.state.hovered) {
-      title_style = "project-title " + this.context.hover_style;
-      sub_style= "project-subtitle " + this.context.hover_style;
-    }
 
-   //        <Link to={"/work/" + project.id}>
-   //          <div> test div :) </div>
-   //        </Link>
+    let style = this.context.link_color;
+    if (this.state.hovered) {
+      style = style + " " + this.context.hover_style;
+    }
+    let title_style = "project-title " + style;
+    let sub_style = "project-subtitle " + style;
 
     if (project.documentation) {
       return (
         <div 
           className="project-item"
         >
-          <Link to={"/work/" + project.id}>
-	          <div
-                    className={title_style}
-                    onMouseEnter={this.mouseEnter}
-                    onMouseLeave={this.mouseLeave}
-                  >
-                    {project.title}
-            </div>
+          <Link to={"/work/" + project.id}
+                className={title_style}
+                onMouseEnter={this.mouseEnter}
+                onMouseLeave={this.mouseLeave}>
+                {project.title}
           </Link>
           <br></br>
-          <Link to={"/work/" + project.id}>
-	          <div 
-                    className={sub_style}
-                    onMouseEnter={this.mouseEnter}
-                    onMouseLeave={this.mouseLeave}
-                  >
-                    <i>{project.subtitle}</i>
-            </div>
+          <Link to={"/work/" + project.id}
+                className={sub_style}
+                onMouseEnter={this.mouseEnter}
+                onMouseLeave={this.mouseLeave}>
+	    <i>{project.subtitle}</i>
           </Link>
         </div>
       );
 
     } else {
-
-    }
-
       return (
         <div 
           className="project-item"
         >
-          <a href={project.link}>
-            <div
-                    className={title_style}
-                    onMouseEnter={this.mouseEnter}
-                    onMouseLeave={this.mouseLeave}
-                  >
-                    {project.title}
-                  </div>
+          <a href={project.link}
+	     className={title_style}
+             onMouseEnter={this.mouseEnter}
+             onMouseLeave={this.mouseLeave}>
+	    {project.title}
           </a>
           <br></br>
-          <a href={project.link}>
-            <div 
-                    className={sub_style}
-                    onMouseEnter={this.mouseEnter}
-                    onMouseLeave={this.mouseLeave}
-                  >
-                    <i>{project.subtitle}</i>
-                  </div>
+          <a href={project.link}
+             className={sub_style}
+             onMouseEnter={this.mouseEnter}
+             onMouseLeave={this.mouseLeave}>
+            <i>{project.subtitle}</i>
           </a>
         </div>
       );
+
     }
   }
 }
-
-// className={`project-title ${this.props.hovered_style}`}
-// className={`project-subtitle ${this.props.hovered_style}`}
-
 
 export { render };
