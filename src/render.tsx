@@ -22,7 +22,7 @@ import waves_favicon from "./../assets/waves-icon.gif";
 import project_metas from "./../assets/project_metas.json"
 
 import { ProjectDocsWithRouter } from "./documentation";
-import { ThemeContext, ThemeLink } from "./theme";
+import { ThemeContext, ThemeLink, A } from "./theme";
 
 
 // colors
@@ -130,8 +130,8 @@ class Page extends React.Component {
           break;
         default:
           this.setState((state, props) => ({
-            bg_color : BG_COLORS[this.color],
-            favicon : FAVICONS[this.color],
+            bg_color : BG_COLORS[state.color],
+            favicon : FAVICONS[state.color],
           }));
           break;
       }
@@ -260,8 +260,9 @@ class Name extends React.Component {
 class About extends React.Component {
   render() {
     return (
-      <div>
-        i am fran
+      <div className="about">
+        <p>Interested in words and space.</p>
+        <p>My <A href="https://twitter.com/franmorojo">twitter</A> where i mostly retweet good things.</p>
       </div>
     );}
 }
