@@ -73,6 +73,7 @@ img {
 }
 
 /* project list page */
+
 .project-item {
   margin-top: 32px;
   margin-bottom: 32px;
@@ -87,6 +88,26 @@ img {
   font-size: 16px;
   margin-left:32px;
   display: inline;
+}
+
+/* archive view*/
+.archive-item {
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+.archive-title {
+  font-size: 24px;
+  display: inline-block;
+}
+
+.archive-date {
+  font-size: 16px;
+  display: inline-block;
+  margin-right: 16px;
+
+  /* nice */
+  width: 69px;
 }
 
 .about a {

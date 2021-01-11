@@ -21,6 +21,7 @@ import waves_favicon from "./../assets/waves-icon.gif";
 
 import project_metas from "./../assets/project_metas.json"
 
+import { ProjectList } from "./project_list";
 import { ProjectDocsWithRouter } from "./documentation";
 import { ThemeContext, ThemeLink, A } from "./theme";
 
@@ -175,7 +176,7 @@ class Page extends React.Component {
           <div id="page">
             <Router>
               <HeaderWithRouter />
-	      <BodyWithRouter />
+	            <BodyWithRouter />
             </Router>
           </div>
         </ThemeContext.Provider>
@@ -298,131 +299,5 @@ class Body extends React.Component {
     );}
 }
 const BodyWithRouter = withRouter(Body);
-
-function renderProjectItem(project, idx: number) {
-  return (
-    <ProjectListItem key={idx} project={project} />
-  );
-}
-
-// the clickable project name/subtitle links
-class ProjectList extends React.Component {
-  constructor(props) {
-    super(props);
-    this.ordered_projects = this.sortReverseChrono(
-                              project_metas.projects);
-  }
-
-  // THE TITAN CHRONOS
-  sortReverseChrono(projects) {
-    const sorted = projects.sort(function(a, b) {
-      if (a.date > b.date) {
-        return -1;
-      } else {
-        return 1;
-      }
-    });
-    return sorted
-  }
-
-  render() {
-    return (
-    <div id="project-list">
-      {this.ordered_projects.map(renderProjectItem, this)}
-    </div>
-      
-    );}
-
-}
-
-
-
-// <A className="class" href="https://some.link" />.
-
-// the clickable project name/subtitle link
-class ProjectListItem extends React.Component {
-  static contextType = ThemeContext;
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      hovered : false;
-    };
-
-    this.mouseEnter = this.mouseEnter.bind(this);
-    this.mouseLeave = this.mouseLeave.bind(this);
-  }
-
-  mouseEnter(e) {
-    this.setState((state, props) => ({
-      hovered : true;
-    }));
-    this.context.onLinkHover(true);
-  }
-
-  mouseLeave(e) {
-    this.setState((state, props) => ({
-      hovered : false;
-    }));
-    this.context.onLinkHover(false);
-  }
-
-
-
-  render() {
-    const project = this.props.project;
-
-    let style = this.context.link_color;
-    if (this.state.hovered) {
-      style = style + " " + this.context.hover_style;
-    }
-    let title_style = "project-title " + style;
-    let sub_style = "project-subtitle " + style;
-
-    if (project.documentation) {
-      return (
-        <div 
-          className="project-item"
-        >
-          <Link to={"/work/" + project.id}
-                className={title_style}
-                onMouseEnter={this.mouseEnter}
-                onMouseLeave={this.mouseLeave}>
-                {project.title}
-          </Link>
-          <br></br>
-          <Link to={"/work/" + project.id}
-                className={sub_style}
-                onMouseEnter={this.mouseEnter}
-                onMouseLeave={this.mouseLeave}>
-	    <i>{project.subtitle}</i>
-          </Link>
-        </div>
-      );
-
-    } else {
-      return (
-        <div 
-          className="project-item"
-        >
-          <a href={project.link}
-	     className={title_style}
-             onMouseEnter={this.mouseEnter}
-             onMouseLeave={this.mouseLeave}>
-	    {project.title}
-          </a>
-          <br></br>
-          <a href={project.link}
-             className={sub_style}
-             onMouseEnter={this.mouseEnter}
-             onMouseLeave={this.mouseLeave}>
-            <i>{project.subtitle}</i>
-          </a>
-        </div>
-      );
-
-    }
-  }
-}
 
 export { render };
