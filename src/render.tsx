@@ -1,8 +1,8 @@
 import * as React from "react";
 import ReactDOM = require("react-dom");
 import { BrowserRouter as Router, 
-         Switch, Route, Link, 
-         withRouter, useRouteMatch
+         Switch, Route, Link, NavLink, Redirect
+         withRouter, useRouteMatch, 
        } from 'react-router-dom';
 import { browserHistory } from 'react-router';
 
@@ -22,8 +22,9 @@ import waves_favicon from "./../assets/waves-icon.gif";
 import project_metas from "./../assets/project_metas.json"
 
 import { ProjectList } from "./project_list";
-import { ProjectDocsWithRouter } from "./documentation";
+import { ProjectDocumentation } from "./documentation";
 import { ThemeContext, ThemeLink, A } from "./theme";
+import { FourOhFour } from "./fourohfour"
 
 
 // colors
@@ -194,20 +195,18 @@ class Header extends React.Component {
           <Name />
         </Link>
         <div id="header-menu-wrapper">
-          <Link to="/">
-            <div className={classNames({
-                            "header-menu-item": true,
-                            "underline-dashed": path == "/",
-                           })}
-            >work</div>
-          </Link>
-          <Link to="/about">
-            <div className={classNames({
-                            "header-menu-item": true,
-                            "underline-dashed": path == "/about",
-                           })}
-            >about</div>
-          </Link>
+          <NavLink to="/work" 
+		   activeClassName="underline-dashed">
+            <div className="header-menu-item">
+	      work
+	    </div>
+          </NavLink>
+          <NavLink to="/about"
+		   activeClassName="underline-dashed">
+            <div className="header-menu-item">
+	      about
+	    </div>
+          </NavLink>
         </div>
       </div>
     );}
@@ -268,6 +267,7 @@ class About extends React.Component {
     );}
 }
 
+
 class Body extends React.Component {
   static contextType = ThemeContext;
 
@@ -286,18 +286,25 @@ class Body extends React.Component {
   render() {
     return (
       <Switch>
+        <Route exact path="/">
+	  <Redirect to="/work" />
+        </Route>
         <Route exact path="/about">
           <About/>
         </Route>
-        <Route exact path="/">
-          <ProjectList />
+        <Route exact path="/work"
+	       component={ProjectList}>
         </Route>
-        <Route path="/work">
-          <ProjectDocsWithRouter />
+        <Route path="/work/:project_id"
+	       component={ProjectDocumentation}>
+        </Route>
+        <Route>
+	  <FourOhFour />
         </Route>
       </Switch>
     );}
 }
 const BodyWithRouter = withRouter(Body);
+
 
 export { render };

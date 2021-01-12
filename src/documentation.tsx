@@ -12,30 +12,7 @@ import what_do_you_wish_sign from "./../assets/what-do-you-wish-sign.png";
 import word_garden from './word-garden';
 
 import { A } from "./theme";
-
-// pages for project documentation
-class ProjectDocumentations extends React.Component {
-  constructor(props) {
-    super(props);
-    
-  }
-
-  render() {
-    return (
-      <div className="documentation">
-	<Switch>
-      	  <Route path={`${this.props.match.path}/:project_id`}
-      	         component={ProjectDocumentation} >
-      	  </Route>
-      	  <Route>
-      	  </Route>
-      	</Switch>
-      </div>
-    );
-  );}
-}
-// https://reactrouter.com/web/api/withRouter
-const ProjectDocsWithRouter = withRouter(ProjectDocumentations);
+import { FourOhFour } from "./fourohfour"
 
 class ProjectDocumentation extends React.Component {
   constructor(props) {
@@ -65,7 +42,8 @@ class ProjectDocumentation extends React.Component {
         return <WhatDoYouWishDoc />
         break;
     }
-    return <div> there is no documetation for {this.id} </div>
+    /* no match */
+    return <FourOhFour />;
   );}
 }
 
@@ -203,4 +181,4 @@ class WhatDoYouWishDoc extends React.Component {
 
 
 
-export { ProjectDocsWithRouter };
+export { ProjectDocumentation };
