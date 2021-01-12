@@ -111,12 +111,14 @@ class Page extends React.Component {
       switch (this.state.effect) {
         case 1:
           this.setState((state, props) => ({
-            bg_color : "waves-bg";
+            bg_color : "waves-bg",
+            favicon : waves_favicon, 
           }));
           break;
         case 3:
           this.setState((state, props) => ({
-            bg_color : "black-bg";
+            bg_color : "black-bg",
+            favicon : black_favicon,
           }));
           break;
         case 4:
