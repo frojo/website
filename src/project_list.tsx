@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
-import dateFormat from "dateFormat";
+import dateFormat from "dateformat";
 
 import project_metas from "./../assets/project_metas.json"
 
