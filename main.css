@@ -72,6 +72,11 @@ img {
   text-decoration-style: dashed;
 }
 
+.underline-dashed{
+  text-decoration: underline;
+  text-decoration-style: dashed;
+}
+
 /* project list page */
 
 .project-item {
