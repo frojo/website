@@ -22,28 +22,36 @@ class ProjectDocumentation extends React.Component {
   }
 
   render() {
+    let doc;
     switch(this.id) {
       case 'souls':
-        return <SoulsDoc />
+        doc = <SoulsDoc />
         break;
       case 'godot-workshop':
-        return <GodotWorkshopDoc />
+        doc = <GodotWorkshopDoc />
         break;
       case 'word-garden':
-        return <WordGardenDoc />
+        doc = <WordGardenDoc />
         break;
       case 'pico8-pcd2020':
-        return <Pico8TalkDoc />
+        doc = <Pico8TalkDoc />
         break;
       case 'pride-prejudice-pussy':
-        return <PridePrejudicePussyDoc />
+        doc = <PridePrejudicePussyDoc />
         break;
       case 'what-do-you-wish':
-        return <WhatDoYouWishDoc />
+        doc = <WhatDoYouWishDoc />
+        break;
+      default:
+	return <FourOhFour />;
         break;
     }
     /* no match */
-    return <FourOhFour />;
+    return (
+      <div className="documentation">
+	{doc}
+      </div>
+    );
   );}
 }
 
