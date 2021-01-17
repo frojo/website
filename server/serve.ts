@@ -6,7 +6,8 @@ const httpServer = http.createServer(app);
 
 const PORT = process.env.PORT || 6969;
 
-app.use(express.static("../docs"));
+/* matches all paths (we handle 404 virtually) */
+app.use("/*", express.static("../docs"));
 
 httpServer.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`);
