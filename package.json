@@ -7,7 +7,8 @@
     "start": "parcel index.html",
     "build-gh": "parcel build index.html -d docs --public-url ./",
     "build-dev": "parcel build index.html -d docs-dev",
-    "start-build": "ts-node-dev server/serve.ts",
+    
+    "fake-dev-server": "ts-node-dev server/serve.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
