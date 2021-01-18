@@ -6,7 +6,7 @@ class FourOhFour extends React.Component {
   render() {
     return (
       <div>
-        <p><b>404</b>. You're asking me for something but I don't understand you :(</p>
+        <p><b>404</b>. You're asking me for something but I don't understand what you want :(</p>
       </div>
     );}
 }
