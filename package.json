@@ -6,6 +6,7 @@
   "scripts": {
     "start": "parcel index.html",
     "build-gh": "parcel build index.html -d docs --public-url ./",
+    "build": "parcel build index.html -d docs",
     "build-dev": "parcel build index.html -d docs-dev",
     
     "fake-dev-server": "ts-node-dev server/serve.ts",
